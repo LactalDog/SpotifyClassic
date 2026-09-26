@@ -1,0 +1,33 @@
+﻿<ViewModels:MainViewModel xmlns:ViewModels="clr-namespace:SpotifyClassic.ViewModels;assembly=SpotifyClassic" IsDataLoaded="True" LocalizedSampleProperty="Dolor enim sem sit magnis" SampleProperty="Vestibulum sed euismod vestibulum">
+    <ViewModels:MainViewModel.Items>
+        <ViewModels:ItemViewModel LineOne="playlists"/>
+        <ViewModels:ItemViewModel LineOne="álbumes"/>
+        <ViewModels:ItemViewModel LineOne="me gusta"/>
+         <ViewModels:ItemViewModel LineOne="artistas"/>
+        
+    </ViewModels:MainViewModel.Items>
+
+    <ViewModels:MainViewModel.Recientes>
+        <ViewModels:TrackModel Titulo="1989" Portada="/Assets/Covers/1989.jpg" Bajada= "Taylor Swift"/>
+        <ViewModels:TrackModel Titulo="Minecraft - Volume Alpha" Portada="/Assets/Covers/mcost.png" Bajada= "C418"/>
+        <ViewModels:TrackModel Titulo="The Fame" Portada="/Assets/Covers/thefame.png" Bajada= "Lady Gaga"/>
+        <ViewModels:TrackModel Titulo= "Confident" Portada= "/Assets/Covers/confident.png" Bajada= "Demi Lovato"/>
+        <ViewModels:TrackModel Titulo= "PinkPantheress" Portada= "/Assets/Covers/pinkp.jpg" Bajada= "Artista"/>
+        <ViewModels:TrackModel Titulo= "Me ahogo en dopamina" Portada= "/Assets/Covers/playlist1.png" Bajada= "De Joaquín"/>
+        <ViewModels:TrackModel Titulo= "SILENTHILL2 (Original Soundtrack)" Portada= "/Assets/Covers/sh2.png" Bajada= "Akira Yamaoka"/>
+        <ViewModels:TrackModel Titulo= "TWICE" Portada= "/Assets/Covers/TWICE.jpg" Bajada= "Artista"/>
+    </ViewModels:MainViewModel.Recientes>
+
+    <ViewModels:MainViewModel.Novedades>
+        <ViewModels:NewsModel Portada = "/Assets/NewsCovers/beyon.png" Tipo = "Álbum" Titulo = "B'DAY (20th ANNIVERSARY DELUXE EDITION)" Artista = "Beyoncé"/>
+        <ViewModels:NewsModel Portada = "/Assets/NewsCovers/neli.png" Tipo = "Álbum" Titulo = "Loose (Deluxe 20th Anniversary Edition)" Artista = "Nelly Furtado"/>
+        <ViewModels:NewsModel Portada = "/Assets/NewsCovers/montana.png" Tipo = "Sencillo" Titulo = "Bass Persuades" Artista = "Miley Cyrus"/>
+        <ViewModels:NewsModel Portada = "/Assets/NewsCovers/juno.png" Tipo = "Sencillo" Titulo = "CLICK" Artista = "JISOO"/>
+        <ViewModels:NewsModel Portada = "/Assets/NewsCovers/risa.png" Tipo = "Sencillo" Titulo = "SaWaDiKa" Artista = "LISA"/>
+        <ViewModels:NewsModel Portada = "/Assets/NewsCovers/prima.png" Tipo = "Álbum" Titulo = "PRIMA" Artista = "ADÉLA"/>
+        <ViewModels:NewsModel Portada = "/Assets/NewsCovers/noc.png" Tipo = "Sencillo" Titulo = "SO GOOD" Artista = "Shay Lia, KAYTRANADA"/>
+        <ViewModels:NewsModel Portada = "/Assets/NewsCovers/mf.png" Tipo = "Álbum" Titulo = "King of Having Fun" Artista = "Medium Build"/>
+
+    </ViewModels:MainViewModel.Novedades>
+
+</ViewModels:MainViewModel>
