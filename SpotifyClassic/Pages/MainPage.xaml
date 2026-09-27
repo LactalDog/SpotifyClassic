@@ -631,9 +631,9 @@
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
                             <Grid Height="140">
-                                <Border x:Name="hitbox" Height="130" VerticalAlignment="Top" d1:LayoutOverrides="TopMargin, BottomMargin, LeftPosition, RightPosition" Margin="20,0,0,0">
+                                <Border x:Name="hitbox" Height="130" VerticalAlignment="Top" d1:LayoutOverrides="TopMargin, BottomMargin, LeftPosition, RightPosition" Margin="20,0,0,0" Opacity="0">
                                     <Border.Background>
-                                        <ImageBrush Stretch="UniformToFill"/>
+                                        <ImageBrush Stretch="UniformToFill" ImageSource="/MusicPreviewLong.png"/>
                                     </Border.Background>
                                 </Border>
                                 <StackPanel Orientation="Horizontal" Margin="20,0,0,0" d1:LayoutOverrides="LeftMargin, RightMargin">
