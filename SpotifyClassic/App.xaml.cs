@@ -128,16 +128,29 @@ namespace SpotifyClassic
             }
         }
 
-        // Code to execute on Unhandled Exceptions
         private void Application_UnhandledException(object sender, ApplicationUnhandledExceptionEventArgs e)
         {
+            // Extraemos e imprimimos la causa exacta del fallo
+            if (e.ExceptionObject != null)
+            {
+                System.Diagnostics.Debug.WriteLine("========================================");
+                System.Diagnostics.Debug.WriteLine("CRASH DETECTADO: " + e.ExceptionObject.GetType().Name);
+                System.Diagnostics.Debug.WriteLine("MENSAJE: " + e.ExceptionObject.Message);
+                if (e.ExceptionObject.InnerException != null)
+                {
+                    System.Diagnostics.Debug.WriteLine("INNER: " + e.ExceptionObject.InnerException.Message);
+                }
+                System.Diagnostics.Debug.WriteLine("STACKTRACE:\n" + e.ExceptionObject.StackTrace);
+                System.Diagnostics.Debug.WriteLine("========================================");
+            }
+
             if (Debugger.IsAttached)
             {
-                // An unhandled exception has occurred; break into the debugger
+                // El depurador se detendrá aquí para que puedas inspeccionar e.ExceptionObject
                 Debugger.Break();
             }
 
-            // Evita que la aplicación se cierre ante excepciones de layout o transiciones
+            // Marcamos como controlado para intentar evitar el cierre forzado
             e.Handled = true;
         }
 

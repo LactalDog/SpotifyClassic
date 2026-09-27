@@ -17,27 +17,29 @@
     shell:SystemTray.Opacity="0.0"
     shell:SystemTray.BackgroundColor="Transparent">
 
+    <!-- Transiciones nativas de página del Toolkit -->
     <toolkit:TransitionService.NavigationInTransition>
         <toolkit:NavigationInTransition>
             <toolkit:NavigationInTransition.Backward>
-                <toolkit:TurnstileTransition Mode="BackwardIn"/>
+                <toolkit:TurnstileTransition Mode="BackwardIn" />
             </toolkit:NavigationInTransition.Backward>
             <toolkit:NavigationInTransition.Forward>
-                <toolkit:TurnstileTransition Mode="ForwardIn"/>
+                <toolkit:TurnstileFeatherTransition Mode="ForwardIn" />
             </toolkit:NavigationInTransition.Forward>
         </toolkit:NavigationInTransition>
     </toolkit:TransitionService.NavigationInTransition>
+
     <toolkit:TransitionService.NavigationOutTransition>
         <toolkit:NavigationOutTransition>
             <toolkit:NavigationOutTransition.Backward>
-                <toolkit:TurnstileTransition Mode="BackwardOut"/>
+                <toolkit:TurnstileFeatherTransition Mode="BackwardOut" />
             </toolkit:NavigationOutTransition.Backward>
             <toolkit:NavigationOutTransition.Forward>
-                <toolkit:TurnstileTransition Mode="ForwardOut"/>
+                <toolkit:TurnstileTransition Mode="ForwardOut" />
             </toolkit:NavigationOutTransition.Forward>
         </toolkit:NavigationOutTransition>
     </toolkit:TransitionService.NavigationOutTransition>
-
+    
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="Transparent" d:DataContext="{d:DesignData /SampleData/MainViewModelSampleData.xaml}">
         <!--Pivot Control-->
@@ -53,13 +55,55 @@
                     </TextBlock>
                 </Grid>
             </phone:PivotItem>
-            <phone:PivotItem x:Name="Álbumes" Header="álbumes">
+            <!-- Pivot 1: Álbumes -->
+            <phone:PivotItem x:Name="PivotAlbumes" Header="álbumes">
                 <Grid>
-                    <TextBlock x:Name="textBlock1" TextWrapping="Wrap" FontFamily="{StaticResource PhoneFontFamilyLight}" Margin="10,0" FontWeight="Light" LineStackingStrategy="BlockLineHeight" LineHeight="37" FontSize="34" Foreground="#B2FFFFFF">
-                        <Run Text="Qué vacío está esto..."/>
-                        <LineBreak/>
-                        <Run Text="Explora el catálogo de Spotify y comienza a agregar música a tu biblioteca."/>
-                    </TextBlock>
+                    <!-- Mensaje de estado vacío -->
+                    <TextBlock x:Name="txtVacioAlbumes"
+                               Text="Qué vacío está esto...&#x0a;Explora el catálogo de Spotify y comienza a agregar música a tu biblioteca."
+                               TextWrapping="Wrap"
+                               Foreground="#B2FFFFFF"
+                               Margin="12,24,12,0"
+                               Visibility="Collapsed" />
+
+                    <!-- LongListMultiSelector con soporte nativo de selección por toque izquierdo -->
+                    <toolkit:LongListMultiSelector x:Name="lstAlbumes"
+                                                   ItemsSource="{Binding Albumes}"
+                                                   Margin="0,0,0,76"
+                                                   toolkit:TiltEffect.IsTiltEnabled="True">
+                        <toolkit:LongListMultiSelector.ItemTemplate>
+                            <DataTemplate>
+                                <!-- El evento Tap se coloca en el Grid raíz del ítem para capturar el toque -->
+                                <Grid Margin="12,12,0,12" Background="Transparent" Tap="ItemAlbum_Tap">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Carátula del álbum -->
+                                    <Border Grid.Column="0" Width="68" Height="68" Background="#262626">
+                                        <Image Source="{Binding Portada}" Stretch="UniformToFill" />
+                                    </Border>
+
+                                    <!-- Textos -->
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="14,0,0,0">
+                                        <!-- Nombre para que Continuum localice este elemento al animar -->
+                                        <TextBlock x:Name="txtTituloAlbum"
+                                                   Text="{Binding Titulo}"
+                                                   FontSize="28"
+                                                   FontFamily="{StaticResource PhoneFontFamilySemiBold}"
+                                                   Foreground="White"
+                                                   TextTrimming="WordEllipsis" />
+                                        <TextBlock Text="{Binding Artista}"
+                                                   FontSize="20"
+                                                   Foreground="#8AFFFFFF"
+                                                   Margin="0,2,0,0"
+                                                   TextTrimming="WordEllipsis" />
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </toolkit:LongListMultiSelector.ItemTemplate>
+                    </toolkit:LongListMultiSelector>
                 </Grid>
             </phone:PivotItem>
             <!--Pivot item one-->

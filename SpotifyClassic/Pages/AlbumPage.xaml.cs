@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
+using SpotifyClassic.Animations;
 
 namespace SpotifyClassic.Pages
 {
@@ -15,6 +11,30 @@ namespace SpotifyClassic.Pages
         public AlbumPage()
         {
             InitializeComponent();
+            this.Loaded += AlbumPage_Loaded;
+        }
+
+        private void AlbumPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Asignamos la transición de llegada hacia adelante y de salida hacia atrás
+            var navIn = new NavigationInTransition();
+            navIn.Forward = new ContinuumTransition(ContinuumTransitionMode.ContinuumForwardInStoryboard, txtTituloDetalle);
+
+            var navOut = new NavigationOutTransition();
+            navOut.Backward = new ContinuumTransition(ContinuumTransitionMode.ContinuumBackwardOutStoryboard, txtTituloDetalle);
+
+            TransitionService.SetNavigationInTransition(this, navIn);
+            TransitionService.SetNavigationOutTransition(this, navOut);
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            if (NavigationContext.QueryString.ContainsKey("title"))
+            {
+                txtTituloDetalle.Text = NavigationContext.QueryString["title"];
+            }
         }
     }
 }

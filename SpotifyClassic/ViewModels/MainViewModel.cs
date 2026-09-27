@@ -14,12 +14,14 @@ namespace SpotifyClassic.ViewModels
             this.Novedades = new ObservableCollection<NewsModel>();
             this.Sugerencias = new ObservableCollection<SuggestionsModel>();
             this.Reproduciendo = new ObservableCollection<PlayingModel>();
+            this.Albumes = new ObservableCollection<AlbumModel>();
         }
 
         /// <summary>
         /// A collection for ItemViewModel objects.
         /// </summary>
         public ObservableCollection<ItemViewModel> Items { get; private set; }
+        public ObservableCollection<AlbumModel> Albumes { get; private set; }
 
         private string _sampleProperty = "Sample Runtime Property Value";
         /// <summary>
@@ -73,6 +75,11 @@ namespace SpotifyClassic.ViewModels
             Recientes.Clear();
 
             Reproduciendo.Add(new PlayingModel() { Portada = "/Assets/NewsCovers/mf.png", Tipo = "Álbum", Titulo = "King of Having Fun", Artista = "Medium Build" });
+
+            Albumes.Add(new AlbumModel { Titulo = "King of Having Fun", Artista = "Medium Build", Año = "2024", Portada = "/Assets/MusicPreview.png" });
+            Albumes.Add(new AlbumModel { Titulo = "The New Abnormal", Artista = "The Strokes", Año = "2020", Portada = "/Assets/MusicPreview.png" });
+            Albumes.Add(new AlbumModel { Titulo = "Currents", Artista = "Tame Impala", Año = "2015", Portada = "/Assets/MusicPreview.png" });
+            Albumes.Add(new AlbumModel { Titulo = "AM", Artista = "Arctic Monkeys", Año = "2013", Portada = "/Assets/MusicPreview.png" });
 
 
             IsDataLoaded = true;
@@ -128,5 +135,43 @@ namespace SpotifyClassic.ViewModels
         public string TiempoRestante { get; set; }
         public string UltimoTiempo { get; set; }
         public string EnPausa { get; set; }
+    }
+
+    public class AlbumModel : INotifyPropertyChanged
+    {
+        private string _titulo;
+        public string Titulo
+        {
+            get { return _titulo; }
+            set { _titulo = value; NotifyPropertyChanged("Titulo"); }
+        }
+
+        private string _artista;
+        public string Artista
+        {
+            get { return _artista; }
+            set { _artista = value; NotifyPropertyChanged("Artista"); }
+        }
+
+        private string _portada;
+        public string Portada
+        {
+            get { return _portada; }
+            set { _portada = value; NotifyPropertyChanged("Portada"); }
+        }
+
+        private string _año;
+        public string Año
+        {
+            get { return _año; }
+            set { _año = value; NotifyPropertyChanged("Año"); }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }
