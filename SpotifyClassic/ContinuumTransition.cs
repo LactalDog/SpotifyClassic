@@ -101,23 +101,23 @@ namespace SpotifyClassic.Animations
         @"<Storyboard xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty=""(UIElement.RenderTransform).(CompositeTransform.TranslateY)"" Storyboard.TargetName=""LayoutRoot"">
                 <EasingDoubleKeyFrame KeyTime=""0"" Value=""0""/>
-                <EasingDoubleKeyFrame KeyTime=""0:0:0.15"" Value=""70"">
+                <EasingDoubleKeyFrame KeyTime=""0:0:0.30"" Value=""60"">
                     <EasingDoubleKeyFrame.EasingFunction>
-                        <ExponentialEase EasingMode=""EaseIn"" Exponent=""3""/>
+                        <ExponentialEase EasingMode=""EaseIn"" Exponent=""4""/>
                     </EasingDoubleKeyFrame.EasingFunction>
                 </EasingDoubleKeyFrame>
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty=""(UIElement.Opacity)"" Storyboard.TargetName=""LayoutRoot"">
                 <EasingDoubleKeyFrame KeyTime=""0"" Value=""1""/>
-                <EasingDoubleKeyFrame KeyTime=""0:0:0.15"" Value=""0"">
+                <EasingDoubleKeyFrame KeyTime=""0:0:0.25"" Value=""0"">
                     <EasingDoubleKeyFrame.EasingFunction>
-                        <ExponentialEase EasingMode=""EaseIn"" Exponent=""3""/>
+                        <ExponentialEase EasingMode=""EaseIn"" Exponent=""4""/>
                     </EasingDoubleKeyFrame.EasingFunction>
                 </EasingDoubleKeyFrame>
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty=""(UIElement.RenderTransform).(CompositeTransform.TranslateY)"" Storyboard.TargetName=""ContinuumElement"">
                 <EasingDoubleKeyFrame KeyTime=""0"" Value=""0""/>
-                <EasingDoubleKeyFrame KeyTime=""0:0:0.15"" Value=""73"">
+                <EasingDoubleKeyFrame KeyTime=""0:0:0.30"" Value=""50"">
                     <EasingDoubleKeyFrame.EasingFunction>
                         <ExponentialEase EasingMode=""EaseIn"" Exponent=""3""/>
                     </EasingDoubleKeyFrame.EasingFunction>
@@ -125,47 +125,47 @@ namespace SpotifyClassic.Animations
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty=""(UIElement.RenderTransform).(CompositeTransform.TranslateX)"" Storyboard.TargetName=""ContinuumElement"">
                 <EasingDoubleKeyFrame KeyTime=""0"" Value=""0""/>
-                <EasingDoubleKeyFrame KeyTime=""0:0:0.15"" Value=""225"">
+                <EasingDoubleKeyFrame KeyTime=""0:0:0.30"" Value=""120"">
                     <EasingDoubleKeyFrame.EasingFunction>
                         <ExponentialEase EasingMode=""EaseIn"" Exponent=""3""/>
                     </EasingDoubleKeyFrame.EasingFunction>
                 </EasingDoubleKeyFrame>
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetName=""ContinuumElement"" Storyboard.TargetProperty=""(UIElement.Opacity)"">
-                <DiscreteDoubleKeyFrame KeyTime=""0:0:0.15"" Value=""0"" />
+                <DiscreteDoubleKeyFrame KeyTime=""0:0:0.28"" Value=""0"" />
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>";
 
         internal static readonly string ContinuumForwardInStoryboard =
         @"<Storyboard xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty=""(UIElement.RenderTransform).(CompositeTransform.TranslateY)"" Storyboard.TargetName=""LayoutRoot"">
-                <EasingDoubleKeyFrame KeyTime=""0"" Value=""50""/>
-                <EasingDoubleKeyFrame KeyTime=""0:0:0.15"" Value=""0"">
+                <EasingDoubleKeyFrame KeyTime=""0"" Value=""60""/>
+                <EasingDoubleKeyFrame KeyTime=""0:0:0.30"" Value=""0"">
                     <EasingDoubleKeyFrame.EasingFunction>
-                        <ExponentialEase EasingMode=""EaseOut"" Exponent=""3""/>
+                        <ExponentialEase EasingMode=""EaseOut"" Exponent=""4""/>
                     </EasingDoubleKeyFrame.EasingFunction>
                 </EasingDoubleKeyFrame>
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty=""(UIElement.RenderTransform).(CompositeTransform.TranslateY)"" Storyboard.TargetName=""ContinuumElement"">
-                <EasingDoubleKeyFrame KeyTime=""0"" Value=""-70""/>
-                <EasingDoubleKeyFrame KeyTime=""0:0:0.15"" Value=""0"">
+                <EasingDoubleKeyFrame KeyTime=""0"" Value=""-40""/>
+                <EasingDoubleKeyFrame KeyTime=""0:0:0.30"" Value=""0"">
                     <EasingDoubleKeyFrame.EasingFunction>
-                        <ExponentialEase EasingMode=""EaseOut"" Exponent=""3""/>
+                        <ExponentialEase EasingMode=""EaseOut"" Exponent=""4""/>
                     </EasingDoubleKeyFrame.EasingFunction>
                 </EasingDoubleKeyFrame>
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty=""(UIElement.RenderTransform).(CompositeTransform.TranslateX)"" Storyboard.TargetName=""ContinuumElement"">
-                <EasingDoubleKeyFrame KeyTime=""0"" Value=""130""/>
-                <EasingDoubleKeyFrame KeyTime=""0:0:0.15"" Value=""0"">
+                <EasingDoubleKeyFrame KeyTime=""0"" Value=""80""/>
+                <EasingDoubleKeyFrame KeyTime=""0:0:0.30"" Value=""0"">
                     <EasingDoubleKeyFrame.EasingFunction>
-                        <ExponentialEase EasingMode=""EaseOut"" Exponent=""3""/>
+                        <ExponentialEase EasingMode=""EaseOut"" Exponent=""4""/>
                     </EasingDoubleKeyFrame.EasingFunction>
                 </EasingDoubleKeyFrame>
             </DoubleAnimationUsingKeyFrames>
-            <DoubleAnimation Storyboard.TargetProperty=""(UIElement.Opacity)"" From=""0"" To=""1"" Duration=""0:0:0.15""
+            <DoubleAnimation Storyboard.TargetProperty=""(UIElement.Opacity)"" From=""0"" To=""1"" Duration=""0:0:0.30""
                              Storyboard.TargetName=""LayoutRoot"">
                 <DoubleAnimation.EasingFunction>
-                    <ExponentialEase EasingMode=""EaseOut"" Exponent=""6""/>
+                    <ExponentialEase EasingMode=""EaseOut"" Exponent=""4""/>
                 </DoubleAnimation.EasingFunction>
             </DoubleAnimation>
         </Storyboard>";
@@ -175,16 +175,16 @@ namespace SpotifyClassic.Animations
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty=""(UIElement.RenderTransform).(CompositeTransform.TranslateY)""
                                             Storyboard.TargetName=""LayoutRoot"">
                 <EasingDoubleKeyFrame KeyTime=""0"" Value=""0""/>
-                <EasingDoubleKeyFrame KeyTime=""0:0:0.15"" Value=""50"">
+                <EasingDoubleKeyFrame KeyTime=""0:0:0.25"" Value=""50"">
                     <EasingDoubleKeyFrame.EasingFunction>
-                        <ExponentialEase EasingMode=""EaseIn"" Exponent=""6""/>
+                        <ExponentialEase EasingMode=""EaseIn"" Exponent=""4""/>
                     </EasingDoubleKeyFrame.EasingFunction>
                 </EasingDoubleKeyFrame>
             </DoubleAnimationUsingKeyFrames>
-            <DoubleAnimation Storyboard.TargetProperty=""(UIElement.Opacity)"" From=""1"" To=""0"" Duration=""0:0:0.15""
+            <DoubleAnimation Storyboard.TargetProperty=""(UIElement.Opacity)"" From=""1"" To=""0"" Duration=""0:0:0.25""
                              Storyboard.TargetName=""LayoutRoot"">
                 <DoubleAnimation.EasingFunction>
-                    <ExponentialEase EasingMode=""EaseIn"" Exponent=""6""/>
+                    <ExponentialEase EasingMode=""EaseIn"" Exponent=""4""/>
                 </DoubleAnimation.EasingFunction>
             </DoubleAnimation>
         </Storyboard>";
@@ -192,18 +192,18 @@ namespace SpotifyClassic.Animations
         internal static readonly string ContinuumBackwardInStoryboard =
         @"<Storyboard xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty=""(UIElement.RenderTransform).(CompositeTransform.TranslateX)"" Storyboard.TargetName=""ContinuumElement"">
-                <EasingDoubleKeyFrame KeyTime=""0"" Value=""-70""/>
-                <EasingDoubleKeyFrame KeyTime=""0:0:0.15"" Value=""0"">
+                <EasingDoubleKeyFrame KeyTime=""0"" Value=""60""/>
+                <EasingDoubleKeyFrame KeyTime=""0:0:0.30"" Value=""0"">
                     <EasingDoubleKeyFrame.EasingFunction>
-                        <ExponentialEase EasingMode=""EaseOut"" Exponent=""3""/>
+                        <ExponentialEase EasingMode=""EaseOut"" Exponent=""4""/>
                     </EasingDoubleKeyFrame.EasingFunction>
                 </EasingDoubleKeyFrame>
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty=""(UIElement.RenderTransform).(CompositeTransform.TranslateY)"" Storyboard.TargetName=""ContinuumElement"">
-                <EasingDoubleKeyFrame KeyTime=""0"" Value=""-30""/>
-                <EasingDoubleKeyFrame KeyTime=""0:0:0.15"" Value=""0"">
+                <EasingDoubleKeyFrame KeyTime=""0"" Value=""-20""/>
+                <EasingDoubleKeyFrame KeyTime=""0:0:0.30"" Value=""0"">
                     <EasingDoubleKeyFrame.EasingFunction>
-                        <ExponentialEase EasingMode=""EaseOut"" Exponent=""3""/>
+                        <ExponentialEase EasingMode=""EaseOut"" Exponent=""4""/>
                     </EasingDoubleKeyFrame.EasingFunction>
                 </EasingDoubleKeyFrame>
             </DoubleAnimationUsingKeyFrames>
@@ -212,13 +212,12 @@ namespace SpotifyClassic.Animations
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty=""(UIElement.Opacity)"" Storyboard.TargetName=""LayoutRoot"">
                 <EasingDoubleKeyFrame KeyTime=""0"" Value=""0""/>
-                <EasingDoubleKeyFrame KeyTime=""0:0:0.15"" Value=""1"">
+                <EasingDoubleKeyFrame KeyTime=""0:0:0.30"" Value=""1"">
                     <EasingDoubleKeyFrame.EasingFunction>
-                        <ExponentialEase EasingMode=""EaseOut"" Exponent=""6""/>
+                        <ExponentialEase EasingMode=""EaseOut"" Exponent=""4""/>
                     </EasingDoubleKeyFrame.EasingFunction>
                 </EasingDoubleKeyFrame>
             </DoubleAnimationUsingKeyFrames>
-            <DoubleAnimation Duration=""0"" To=""0"" Storyboard.TargetProperty=""(UIElement.RenderTransform).(CompositeTransform.TranslateY)"" Storyboard.TargetName=""LayoutRoot""/>
         </Storyboard>";
     }
 

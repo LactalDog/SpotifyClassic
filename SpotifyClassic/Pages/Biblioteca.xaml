@@ -73,8 +73,11 @@
                                                    toolkit:TiltEffect.IsTiltEnabled="True">
                         <toolkit:LongListMultiSelector.ItemTemplate>
                             <DataTemplate>
-                                <!-- El evento Tap se coloca en el Grid raíz del ítem para capturar el toque -->
-                                <Grid Margin="12,12,0,12" Background="Transparent" Tap="ItemAlbum_Tap">
+                                <!-- Agregamos toolkit:TurnstileFeatherEffect.FeatheringIndex="0" para activar la cascada -->
+                                <Grid Margin="12,12,0,12" 
+              Background="Transparent" 
+              Tap="ItemAlbum_Tap"
+              toolkit:TurnstileFeatherEffect.FeatheringIndex="0">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
@@ -87,18 +90,17 @@
 
                                     <!-- Textos -->
                                     <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="14,0,0,0">
-                                        <!-- Nombre para que Continuum localice este elemento al animar -->
                                         <TextBlock x:Name="txtTituloAlbum"
-                                                   Text="{Binding Titulo}"
-                                                   FontSize="28"
-                                                   FontFamily="{StaticResource PhoneFontFamilySemiBold}"
-                                                   Foreground="White"
-                                                   TextTrimming="WordEllipsis" />
+                           Text="{Binding Titulo}"
+                           FontSize="28"
+                           FontFamily="{StaticResource PhoneFontFamilySemiBold}"
+                           Foreground="White"
+                           TextTrimming="WordEllipsis" />
                                         <TextBlock Text="{Binding Artista}"
-                                                   FontSize="20"
-                                                   Foreground="#8AFFFFFF"
-                                                   Margin="0,2,0,0"
-                                                   TextTrimming="WordEllipsis" />
+                           FontSize="20"
+                           Foreground="#8AFFFFFF"
+                           Margin="0,2,0,0"
+                           TextTrimming="WordEllipsis" />
                                     </StackPanel>
                                 </Grid>
                             </DataTemplate>

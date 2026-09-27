@@ -11,6 +11,9 @@ namespace SpotifyClassic
 {
     public partial class Biblioteca : PhoneApplicationPage
     {
+        // Guardamos el elemento seleccionado para garantizar que el retorno anime el mismo álbum
+        private FrameworkElement _ultimoElementoSeleccionado = null;
+
         public Biblioteca()
         {
             InitializeComponent();
@@ -54,11 +57,18 @@ namespace SpotifyClassic
         {
             base.OnNavigatedTo(e);
 
+            // Si estamos regresando de AlbumPage, reasignamos la animación de retorno al elemento original
+            if (e.NavigationMode == NavigationMode.Back && _ultimoElementoSeleccionado != null)
+            {
+                var navIn = new NavigationInTransition();
+                navIn.Backward = new ContinuumTransition(ContinuumTransitionMode.ContinuumBackwardInStoryboard, _ultimoElementoSeleccionado);
+                TransitionService.SetNavigationInTransition(this, navIn);
+            }
+
             if (NavigationContext.QueryString.ContainsKey("seccion"))
             {
                 string seccionSolicitada = NavigationContext.QueryString["seccion"].ToLowerInvariant();
 
-                // Usamos Dispatcher.BeginInvoke para permitir que el Pivot termine su ciclo de dibujo inicial
                 Dispatcher.BeginInvoke(() =>
                 {
                     try
@@ -90,14 +100,16 @@ namespace SpotifyClassic
             var albumSeleccionado = itemGrid.DataContext as ViewModels.AlbumModel;
             if (albumSeleccionado == null) return;
 
+            // Buscamos el TextBlock específico del título
             var txtTitulo = FindChild<TextBlock>(itemGrid, "txtTituloAlbum");
-            FrameworkElement elementoContinuum = (FrameworkElement)txtTitulo ?? itemGrid;
+            _ultimoElementoSeleccionado = (FrameworkElement)txtTitulo ?? itemGrid;
 
+            // Configuramos la transición de salida hacia adelante y la de retorno
             var navOut = new NavigationOutTransition();
-            navOut.Forward = new ContinuumTransition(ContinuumTransitionMode.ContinuumForwardOutStoryboard, elementoContinuum);
+            navOut.Forward = new ContinuumTransition(ContinuumTransitionMode.ContinuumForwardOutStoryboard, _ultimoElementoSeleccionado);
 
             var navIn = new NavigationInTransition();
-            navIn.Backward = new ContinuumTransition(ContinuumTransitionMode.ContinuumBackwardInStoryboard, elementoContinuum);
+            navIn.Backward = new ContinuumTransition(ContinuumTransitionMode.ContinuumBackwardInStoryboard, _ultimoElementoSeleccionado);
 
             TransitionService.SetNavigationOutTransition(this, navOut);
             TransitionService.SetNavigationInTransition(this, navIn);
