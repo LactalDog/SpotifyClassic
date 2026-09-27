@@ -234,7 +234,6 @@
     <Content Include="GreyPreviewImage.png" />
     <Content Include="MusicPreview.png" />
     <Content Include="MusicPreviewLong.png" />
-    <Content Include="NeonRain.mp3" />
     <Content Include="PanoramaBackground.png" />
     <Content Include="Play.png" />
     <Content Include="README_FIRST.txt" />

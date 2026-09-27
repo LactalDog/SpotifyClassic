@@ -630,25 +630,32 @@
                     </phone:LongListSelector.Foreground>
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal" Height="185" Margin="19,0,0,0">
-                                <Grid Width="175" Height="175" VerticalAlignment="Top">
-                                    <Border x:Name="Portada_Copy" Width="175" Height="175" VerticalAlignment="Top">
-                                        <Border.Background>
-                                            <ImageBrush Stretch="UniformToFill" ImageSource="/MusicPreview.png"/>
-                                        </Border.Background>
-                                    </Border>
-                                    <Border x:Name="Portada" Width="175" Height="175" VerticalAlignment="Top">
-                                        <Border.Background>
-                                            <ImageBrush Stretch="UniformToFill" ImageSource="{Binding Portada}"/>
-                                        </Border.Background>
-                                    </Border>
-                                </Grid>
-                                <StackPanel>
-                                    <TextBlock x:Name="Tipo" Text="{Binding Tipo}" TextWrapping="Wrap" Margin="10,0,10,-3" Style="{StaticResource PhoneTextSubtleStyle}" />
-                                    <TextBlock x:Name="Título" Text="{Binding Titulo}" Margin="10,0" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeMediumLarge}" TextTrimming="WordEllipsis" TextWrapping="Wrap" MaxWidth="244" MaxHeight="102" />
-                                    <TextBlock x:Name="Artista" Text="{Binding Artista}" TextWrapping="Wrap" Margin="10,0" Style="{StaticResource PhoneTextSubtleStyle}" />
+                            <Grid Height="140">
+                                <Border x:Name="hitbox" Height="130" VerticalAlignment="Top" d1:LayoutOverrides="TopMargin, BottomMargin, LeftPosition, RightPosition" Margin="20,0,0,0">
+                                    <Border.Background>
+                                        <ImageBrush Stretch="UniformToFill"/>
+                                    </Border.Background>
+                                </Border>
+                                <StackPanel Orientation="Horizontal" Margin="20,0,0,0" d1:LayoutOverrides="LeftMargin, RightMargin">
+                                    <Grid Width="130" Height="130" VerticalAlignment="Top">
+                                        <Border x:Name="placeholder" Height="130" VerticalAlignment="Top" d1:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin, LeftPosition, RightPosition">
+                                            <Border.Background>
+                                                <ImageBrush Stretch="UniformToFill" ImageSource="/MusicPreview.png"/>
+                                            </Border.Background>
+                                        </Border>
+                                        <Border x:Name="Portada" Height="130" VerticalAlignment="Top" d1:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin, LeftPosition, RightPosition">
+                                            <Border.Background>
+                                                <ImageBrush Stretch="UniformToFill" ImageSource="{Binding Portada}"/>
+                                            </Border.Background>
+                                        </Border>
+                                    </Grid>
+                                    <StackPanel Width="272">
+                                        <TextBlock x:Name="Tipo" Text="{Binding Tipo}" TextWrapping="Wrap" Margin="10,0" Style="{StaticResource PhoneTextSubtleStyle}" />
+                                        <TextBlock x:Name="Título" Text="{Binding Titulo}" Margin="10,0" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeMediumLarge}" TextTrimming="WordEllipsis" TextWrapping="Wrap" MaxHeight="70" LineHeight="27" LineStackingStrategy="BlockLineHeight" />
+                                        <TextBlock x:Name="Artista" Text="{Binding Artista}" TextWrapping="Wrap" Margin="10,0" Style="{StaticResource PhoneTextSubtleStyle}" />
+                                    </StackPanel>
                                 </StackPanel>
-                            </StackPanel>
+                            </Grid>
                         </DataTemplate>
                     </phone:LongListSelector.ItemTemplate>
                 </phone:LongListSelector>
