@@ -42,26 +42,46 @@
     <Grid x:Name="LayoutRoot" Background="Transparent" d:DataContext="{d:DesignData /SampleData/MainViewModelSampleData.xaml}">
         <!--Pivot Control-->
         <!--Pivot Control-->
-        <phone:Pivot x:Name="MainPivot" Title="TU BILIOTECA">
+        <phone:Pivot x:Name="MainPivot" Title="TU BIBLIOTECA">
             <!--Pivot item one-->
-            <phone:PivotItem x:Name="Tus_me_gusta" Header="me gusta">
+            <phone:PivotItem x:Name="Playlists" Header="playlists">
                 <Grid>
-                    <TextBlock x:Name="textBlock" TextWrapping="Wrap" Text="Qué vacío está esto. Conéctate a tu PC o ve a la Tienda Xbox Music para agregar música." FontFamily="Portable User Interface" Margin="10,0" FontWeight="Light" LineStackingStrategy="BlockLineHeight" LineHeight="37" FontSize="37" Foreground="#B2FFFFFF"/>
+                    <TextBlock x:Name="textBlock2" TextWrapping="Wrap" FontFamily="{StaticResource PhoneFontFamilyLight}" Margin="10,0" FontWeight="Light" LineStackingStrategy="BlockLineHeight" LineHeight="37" FontSize="34" Foreground="#B2FFFFFF">
+                        <Run Text="Qué vacío está esto..."/>
+                        <LineBreak/>
+                        <Run Text="Explora el catálogo de Spotify y comienza a agregar música a tu biblioteca."/>
+                    </TextBlock>
+                </Grid>
+            </phone:PivotItem>
+            <phone:PivotItem x:Name="Álbumes" Header="álbumes">
+                <Grid>
+                    <TextBlock x:Name="textBlock1" TextWrapping="Wrap" FontFamily="{StaticResource PhoneFontFamilyLight}" Margin="10,0" FontWeight="Light" LineStackingStrategy="BlockLineHeight" LineHeight="37" FontSize="34" Foreground="#B2FFFFFF">
+                        <Run Text="Qué vacío está esto..."/>
+                        <LineBreak/>
+                        <Run Text="Explora el catálogo de Spotify y comienza a agregar música a tu biblioteca."/>
+                    </TextBlock>
+                </Grid>
+            </phone:PivotItem>
+            <!--Pivot item one-->
+            <phone:PivotItem x:Name="Canciones" Header="me gusta">
+                <Grid>
+                    <TextBlock x:Name="textBlock" TextWrapping="Wrap" FontFamily="{StaticResource PhoneFontFamilyLight}" Margin="10,0" FontWeight="Light" LineStackingStrategy="BlockLineHeight" LineHeight="37" FontSize="34" Foreground="#B2FFFFFF">
+                        <Run Text="Qué vacío está esto..."/>
+                        <LineBreak/>
+                        <Run Text="Explora el catálogo de Spotify y comienza a agregar música a tu biblioteca."/>
+                    </TextBlock>
                 </Grid>
             </phone:PivotItem>
 
             <!--Pivot item two-->
-            <phone:PivotItem x:Name="Álbumes" Header="álbumes">
-                <Grid/>
-            </phone:PivotItem>
             <phone:PivotItem x:Name="Artistas" Header="artistas">
-                <Grid/>
-            </phone:PivotItem>
-            <phone:PivotItem x:Name="Playlists" Header="playlists">
-                <Grid/>
-            </phone:PivotItem>
-            <phone:PivotItem x:Name="Podcasts" Header="podcasts">
-                <Grid/>
+                <Grid>
+                    <TextBlock x:Name="textBlock3" TextWrapping="Wrap" FontFamily="{StaticResource PhoneFontFamilyLight}" Margin="10,0" FontWeight="Light" LineStackingStrategy="BlockLineHeight" LineHeight="37" FontSize="34" Foreground="#B2FFFFFF">
+                        <Run Text="Qué vacío está esto..."/>
+                        <LineBreak/>
+                        <Run Text="Explora el catálogo de Spotify y comienza a agregar música a tu biblioteca."/>
+                    </TextBlock>
+                </Grid>
             </phone:PivotItem>
         </phone:Pivot>
     </Grid>

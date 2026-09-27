@@ -1554,7 +1554,7 @@ namespace SpotifyClassic
 
         private void IrAcercaDe(object sender, EventArgs e)
         {
-            NavigationService.Navigate(new Uri("/AcercaDe.xaml", UriKind.Relative));
+            NavigationService.Navigate(new Uri("/Pages/AcercaDe.xaml", UriKind.Relative));
         }
 
         private void AbrirSeccionBiblioteca(object sender, SelectionChangedEventArgs e)
@@ -1564,7 +1564,7 @@ namespace SpotifyClassic
             var itemSeleccionado = (ViewModels.ItemViewModel)e.AddedItems[0];
             if (itemSeleccionado == null) return;
 
-            string ruta = "/Biblioteca.xaml?seccion=" + itemSeleccionado.LineOne;
+            string ruta = "/Pages/Biblioteca.xaml?seccion=" + itemSeleccionado.LineOne;
             NavigationService.Navigate(new Uri(ruta, UriKind.Relative));
 
             ((Microsoft.Phone.Controls.LongListSelector)sender).SelectedItem = null;
