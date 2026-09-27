@@ -25,15 +25,13 @@ namespace SpotifyClassic
                 // Deslizamos el Pivot (MainPivot) según la palabra recibida
                 // Nota: Los índices empiezan en 0 (0 es la primera pestaña, 1 la segunda, etc.)
                 if (seccionSolicitada == "tus me gusta")
-                    MainPivot.SelectedIndex = 0;
+                    MainPivot.SelectedIndex = 2;
                 else if (seccionSolicitada == "álbumes")
                     MainPivot.SelectedIndex = 1;
                 else if (seccionSolicitada == "artistas")
-                    MainPivot.SelectedIndex = 2;
-                else if (seccionSolicitada == "playlists")
                     MainPivot.SelectedIndex = 3;
-                else if (seccionSolicitada == "podcasts")
-                    MainPivot.SelectedIndex = 4;
+                else if (seccionSolicitada == "playlists")
+                    MainPivot.SelectedIndex = 0;
             }
         }
     }
