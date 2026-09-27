@@ -1017,11 +1017,28 @@ namespace SpotifyClassic
                 foreach (JObject obj in items)
                 {
                     string portada = (string)obj["portada"];
+                    string rawArtista = (string)obj["artista"];
+
+                    // Formateamos el creador para que muestre "de <Nombre>"
+                    string artistaFormateado = "Spotify";
+                    if (!string.IsNullOrWhiteSpace(rawArtista))
+                    {
+                        artistaFormateado = rawArtista.Trim();
+                        if (!artistaFormateado.StartsWith("de ", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            artistaFormateado = "de " + artistaFormateado;
+                        }
+                    }
+                    else
+                    {
+                        artistaFormateado = "de Spotify";
+                    }
+
                     App.ViewModel.Sugerencias.Add(new ViewModels.SuggestionsModel
                     {
                         Titulo = (string)obj["titulo"] ?? "Desconocido",
                         Tipo = (string)obj["tipo"] ?? "Playlist",
-                        Artista = (string)obj["artista"] ?? "",
+                        Artista = artistaFormateado,
                         Portada = string.IsNullOrWhiteSpace(portada) ? "" : portada
                     });
                 }
@@ -1031,7 +1048,6 @@ namespace SpotifyClassic
                 System.Diagnostics.Debug.WriteLine("Error Sugerencias: " + ex.Message);
             }
         }
-
         private async void lstRecientes_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var selectedTrack = lstRecientes.SelectedItem as ViewModels.TrackModel;

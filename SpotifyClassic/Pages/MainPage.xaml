@@ -568,6 +568,9 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <DataTemplate x:Key="DataTemplate4">
+            <Grid Height="130"/>
+        </DataTemplate>
     </phone:PhoneApplicationPage.Resources>
 
     <Grid x:Name="LayoutRoot" Background="Black">
@@ -620,11 +623,11 @@
                 </phone:LongListSelector>
             </phone:PanoramaItem>
 
-            <phone:PanoramaItem x:Name="Sugerencias" Header="tus playlists">
+            <phone:PanoramaItem x:Name="Playlists" Header="tus playlists">
                 <phone:PanoramaItem.Foreground>
                     <SolidColorBrush Color="{StaticResource PhoneForegroundColor}"/>
                 </phone:PanoramaItem.Foreground>
-                <phone:LongListSelector ItemsSource="{Binding Sugerencias}" Background="Transparent" BorderThickness="0" Margin="0,-25,0,0">
+                <phone:LongListSelector ItemsSource="{Binding Sugerencias}" Background="Transparent" BorderThickness="0" Margin="0,-25,0,0" ListFooterTemplate="{StaticResource DataTemplate4}">
                     <phone:LongListSelector.Foreground>
                         <SolidColorBrush Color="{StaticResource PhoneForegroundColor}"/>
                     </phone:LongListSelector.Foreground>
