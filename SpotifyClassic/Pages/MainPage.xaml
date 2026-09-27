@@ -53,15 +53,15 @@
                 </Grid.RowDefinitions>
 
                 <controlsPrimitives:PanningBackgroundLayer x:Name="BackgroundLayer" Grid.RowSpan="2" HorizontalAlignment="Left">
-                    <Border x:Name="background" Width="1024" Height="800" Margin="-1,0">
-                        <Grid Width="1024" Height="800">
+                    <Border x:Name="background" Margin="-1,0">
+                        <Grid>
                             <!-- Máscara de recorte estricta centrada para evitar desbordes -->
                             <Grid.Clip>
                                 <RectangleGeometry Rect="0,0,1024,800"/>
                             </Grid.Clip>
 
                             <!-- Contenedor centralizado para garantizar simetría horizontal y vertical -->
-                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Width="1024" Height="800">
+                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <Image x:Name="ImgFondoPanorama" 
                                        Stretch="UniformToFill" 
                                        HorizontalAlignment="Center" 
