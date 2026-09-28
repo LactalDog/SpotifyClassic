@@ -17,11 +17,11 @@ namespace SpotifyClassic.Pages
 
             if (NavigationContext.QueryString.ContainsKey("title"))
             {
-                txtTituloDetalle.Text = Uri.UnescapeDataString(NavigationContext.QueryString["title"]);
+                Titulo.Text = Uri.UnescapeDataString(NavigationContext.QueryString["title"]);
             }
             if (NavigationContext.QueryString.ContainsKey("artist"))
             {
-                txtArtistaDetalle.Text = Uri.UnescapeDataString(NavigationContext.QueryString["artist"]);
+                Artista.Text = Uri.UnescapeDataString(NavigationContext.QueryString["artist"]);
             }
         }
     }

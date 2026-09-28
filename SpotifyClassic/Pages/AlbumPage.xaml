@@ -8,11 +8,11 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    SupportedOrientations="Portrait" Orientation="Portrait"
-    shell:SystemTray.IsVisible="True">
+    SupportedOrientations="Portrait" Orientation="Portrait" shell:SystemTray.IsVisible="True"
+    shell:SystemTray.Opacity="0.0"
+    shell:SystemTray.BackgroundColor="Transparent">
 
     <toolkit:TransitionService.NavigationInTransition>
         <toolkit:NavigationInTransition>
@@ -43,17 +43,60 @@
         </Grid.RowDefinitions>
 
         <!-- Bloque superior de títulos (FeatheringIndex="0") -->
-        <StackPanel Grid.Row="0" Margin="24,17,0,28" 
+
+        <!-- Bloque superior de títulos (FeatheringIndex="0") -->
+        <StackPanel Grid.Row="0" Margin="24,17,24,28" 
                     toolkit:TurnstileFeatherEffect.FeatheringIndex="0">
-            <TextBlock Text="SPOTIFY" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock x:Name="txtTituloDetalle" Text="Nombre del álbum" Margin="0,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
-            <TextBlock x:Name="txtArtistaDetalle" Text="Artista" Margin="0,0,0,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+            <TextBlock x:Name="Tipo" Text="SOLAR FIELDS" Style="{StaticResource PhoneTextNormalStyle}" Padding="0" Margin="0" FontFamily="Portable User Interface"/>
+            <TextBlock x:Name="Tipo_Copy" Text="álbum" Style="{StaticResource PhoneTextNormalStyle}" Padding="0" Margin="0,0,0,12" FontFamily="{StaticResource PhoneFontFamilySemiLight}" FontSize="{StaticResource PanoramaItemHeaderFontSize}"/>
+            <StackPanel Orientation="Horizontal" Margin="0">
+                <Grid>
+                    <Image x:Name="Portada" Width="190" Source="/Assets/MusicPreview.png" Stretch="UniformToFill" HorizontalAlignment="Right" Height="190"/>
+                    <Border x:Name="drop_shadow" BorderThickness="1" Padding="0" HorizontalAlignment="Right" Height="70" VerticalAlignment="Top" Width="70">
+                        <Border.Background>
+                            <RadialGradientBrush>
+                                <GradientStop Color="#59000000" Offset="0"/>
+                                <GradientStop Offset="1"/>
+                            </RadialGradientBrush>
+                        </Border.Background>
+                    </Border>
+                    <Border x:Name="play_icon" BorderThickness="1" Padding="0" Height="50" Width="50" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,10,0">
+                        <Border.Background>
+                            <ImageBrush Stretch="UniformToFill" ImageSource="/Play.png"/>
+                        </Border.Background>
+                    </Border>
+                </Grid>
+
+                <StackPanel d:LayoutOverrides="TopPosition, BottomPosition" Margin="12,0,0,0" Width="230">
+                    <TextBlock x:Name="Detalles_Copy" Text="2009" Margin="0" Style="{StaticResource PhoneTextSubtleStyle}" FontFamily="Portable User Interface" LineStackingStrategy="BlockLineHeight" TextWrapping="Wrap" LineHeight="22" MaxHeight="44">
+                        <TextBlock.Foreground>
+                            <SolidColorBrush Color="{StaticResource PhoneTextMidContrastColor}"/>
+                        </TextBlock.Foreground>
+                    </TextBlock>
+                    <TextBlock x:Name="Titulo" Text="Mirror's Edge" Style="{StaticResource PhoneTextTitle1Style}" d:LayoutOverrides="TopPosition, BottomPosition" FontFamily="Portable User Interface" FontSize="{StaticResource PhoneFontSizeLarge}" LineStackingStrategy="BlockLineHeight" MaxHeight="102" LineHeight="34" Margin="0" TextTrimming="WordEllipsis" TextWrapping="Wrap">
+                        <TextBlock.Foreground>
+                            <SolidColorBrush Color="{StaticResource PhoneTextBoxSelectionForegroundColor}"/>
+                        </TextBlock.Foreground>
+                    </TextBlock>
+                    <TextBlock x:Name="Artista" Text="Solar Fields, EA Games Soundtrack" Margin="0" Style="{StaticResource PhoneTextSubtleStyle}" FontFamily="Portable User Interface">
+                        <TextBlock.Foreground>
+                            <SolidColorBrush Color="{StaticResource SpotifyAccentColor}"/>
+                        </TextBlock.Foreground>
+                    </TextBlock>
+                    <TextBlock x:Name="Detalles" Text="10 canciones • 1 h 10 min" Margin="0" Style="{StaticResource PhoneTextSubtleStyle}" FontFamily="{StaticResource PhoneFontFamilySemiLight}" LineStackingStrategy="BlockLineHeight" TextWrapping="Wrap" LineHeight="22" MaxHeight="44">
+                        <TextBlock.Foreground>
+                            <SolidColorBrush Color="{StaticResource PhoneTextMidContrastColor}"/>
+                        </TextBlock.Foreground>
+                    </TextBlock>
+                </StackPanel>
+            </StackPanel>
         </StackPanel>
 
         <!-- Bloque inferior de canciones/contenido (FeatheringIndex="1") -->
         <Grid Grid.Row="1" Margin="24,0,24,0" 
               toolkit:TurnstileFeatherEffect.FeatheringIndex="1">
-            <TextBlock Text="canciones..." Style="{StaticResource PhoneTextSubtleStyle}"/>
+            <TextBlock Text="canciones..." Style="{StaticResource PhoneTextSubtleStyle}" FontFamily="Portable User Interface"/>
+            <toolkit:LongListMultiSelector/>
         </Grid>
     </Grid>
 

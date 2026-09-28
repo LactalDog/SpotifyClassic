@@ -13,7 +13,8 @@
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait" Orientation="Portrait"
     shell:SystemTray.IsVisible="True"
-    shell:SystemTray.Opacity="0.0">
+    shell:SystemTray.Opacity="0.0"
+    shell:SystemTray.BackgroundColor="Transparent">
 
     <phone:PhoneApplicationPage.Resources>
         <!-- Convertidores para los colores del JumpList -->
@@ -74,7 +75,7 @@
                         <phone:LongListSelector.GroupHeaderTemplate>
                             <DataTemplate>
                                 <Border Background="Transparent" Margin="12,8,0,8">
-                                    <Border Background="{StaticResource PhoneAccentBrush}"  
+                                    <Border Background="#FF83C541"
                                             Padding="8,0,0,0" Width="62" Height="62"                
                                             HorizontalAlignment="Left">
                                         <TextBlock Text="{Binding Key}" 
