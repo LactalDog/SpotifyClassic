@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
+using SpotifyClassic.Data;
 using SpotifyClassic.Resources;
 
 namespace SpotifyClassic.ViewModels
@@ -55,10 +58,36 @@ namespace SpotifyClassic.ViewModels
             }
         }
 
+        private List<AlphaKeyGroup<AlbumModel>> _albumesAgrupados;
+        public List<AlphaKeyGroup<AlbumModel>> AlbumesAgrupados
+        {
+            get { return _albumesAgrupados; }
+            set
+            {
+                if (_albumesAgrupados != value)
+                {
+                    _albumesAgrupados = value;
+                    NotifyPropertyChanged("AlbumesAgrupados");
+                }
+            }
+        }
+
         public bool IsDataLoaded
         {
             get;
             private set;
+        }
+
+        public void ActualizarAgrupacionAlbumes()
+        {
+            if (Albumes != null)
+            {
+                AlbumesAgrupados = AlphaKeyGroup<AlbumModel>.CreateGroups(
+                    Albumes,
+                    CultureInfo.CurrentUICulture,
+                    (AlbumModel s) => string.IsNullOrEmpty(s.Titulo) ? "#" : s.Titulo,
+                    true);
+            }
         }
 
         /// <summary>
@@ -76,24 +105,25 @@ namespace SpotifyClassic.ViewModels
 
             Reproduciendo.Add(new PlayingModel() { Portada = "/Assets/NewsCovers/mf.png", Tipo = "Álbum", Titulo = "King of Having Fun", Artista = "Medium Build" });
 
+            Albumes.Clear();
+            Albumes.Add(new AlbumModel { Titulo = "AM", Artista = "Arctic Monkeys", Año = "2013", Portada = "/Assets/MusicPreview.png" });
+            Albumes.Add(new AlbumModel { Titulo = "Currents", Artista = "Tame Impala", Año = "2015", Portada = "/Assets/MusicPreview.png" });
             Albumes.Add(new AlbumModel { Titulo = "King of Having Fun", Artista = "Medium Build", Año = "2024", Portada = "/Assets/MusicPreview.png" });
             Albumes.Add(new AlbumModel { Titulo = "The New Abnormal", Artista = "The Strokes", Año = "2020", Portada = "/Assets/MusicPreview.png" });
-            Albumes.Add(new AlbumModel { Titulo = "Currents", Artista = "Tame Impala", Año = "2015", Portada = "/Assets/MusicPreview.png" });
-            Albumes.Add(new AlbumModel { Titulo = "AM", Artista = "Arctic Monkeys", Año = "2013", Portada = "/Assets/MusicPreview.png" });
+
+            ActualizarAgrupacionAlbumes();
 
 
             IsDataLoaded = true;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged(String propertyName)
+        private void NotifyPropertyChanged(string propertyName)
         {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (null != handler)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
+
         public ObservableCollection<TrackModel> Recientes { get; private set; }
         public ObservableCollection<NewsModel> Novedades { get; private set; }
         public ObservableCollection<SuggestionsModel> Sugerencias { get; private set; }

@@ -17,14 +17,13 @@
     shell:SystemTray.Opacity="0.0"
     shell:SystemTray.BackgroundColor="Transparent">
 
-    <!-- Transiciones nativas de página del Toolkit -->
     <toolkit:TransitionService.NavigationInTransition>
         <toolkit:NavigationInTransition>
             <toolkit:NavigationInTransition.Backward>
-                <toolkit:TurnstileTransition Mode="BackwardIn" />
+                <toolkit:TurnstileFeatherTransition Mode="BackwardIn"/>
             </toolkit:NavigationInTransition.Backward>
             <toolkit:NavigationInTransition.Forward>
-                <toolkit:TurnstileFeatherTransition Mode="ForwardIn" />
+                <toolkit:TurnstileFeatherTransition Mode="ForwardIn"/>
             </toolkit:NavigationInTransition.Forward>
         </toolkit:NavigationInTransition>
     </toolkit:TransitionService.NavigationInTransition>
@@ -32,102 +31,90 @@
     <toolkit:TransitionService.NavigationOutTransition>
         <toolkit:NavigationOutTransition>
             <toolkit:NavigationOutTransition.Backward>
-                <toolkit:TurnstileFeatherTransition Mode="BackwardOut" />
+                <toolkit:TurnstileFeatherTransition Mode="BackwardOut"/>
             </toolkit:NavigationOutTransition.Backward>
             <toolkit:NavigationOutTransition.Forward>
-                <toolkit:TurnstileTransition Mode="ForwardOut" />
+                <toolkit:TurnstileFeatherTransition Mode="ForwardOut"/>
             </toolkit:NavigationOutTransition.Forward>
         </toolkit:NavigationOutTransition>
     </toolkit:TransitionService.NavigationOutTransition>
-    
+
+    <phone:PhoneApplicationPage.Resources>
+        <!-- JumpList (grilla para seleccionar la letra) -->
+        <!-- Reemplaza:
+     toolkit:TurnstileFeatherEffect.FeatherStyle="{StaticResource TurnstileFeatherElementStyle}"
+     Por: -->
+        <phone:LongListSelector x:Name="lstAlbumes"
+                        ItemsSource="{Binding AlbumesAgrupados}"
+                        HideEmptyGroups="True"
+                        IsGroupingEnabled="True"
+                        LayoutMode="List"
+                        GroupHeaderTemplate="{StaticResource AlbumGroupHeaderTemplate}"
+                        ItemTemplate="{StaticResource AlbumItemTemplate}"
+                        JumpListStyle="{StaticResource AlbumJumpListStyle}"
+                        toolkit:TurnstileFeatherEffect.FeatheringIndex="1"/>
+
+        <!-- Sticky Header (el tile azul con la letra que se queda fijado arriba al scrollear) -->
+        <DataTemplate x:Key="AlbumGroupHeaderTemplate">
+            <Border Background="Transparent" Padding="5">
+                <Border Background="{StaticResource PhoneAccentBrush}" 
+                        BorderBrush="{StaticResource PhoneAccentBrush}" 
+                        BorderThickness="2" 
+                        Width="62" Height="62" 
+                        Margin="0,0,18,0" 
+                        HorizontalAlignment="Left">
+                    <TextBlock Text="{Binding Key}" 
+                               Foreground="{StaticResource PhoneForegroundBrush}" 
+                               FontSize="36" 
+                               Padding="6" 
+                               FontFamily="{StaticResource PhoneFontFamilySemiLight}"
+                               HorizontalAlignment="Left" 
+                               VerticalAlignment="Center"/>
+                </Border>
+            </Border>
+        </DataTemplate>
+
+        <!-- Template de cada elemento Álbum -->
+        <DataTemplate x:Key="AlbumItemTemplate">
+            <Grid Margin="0,8,0,8" toolkit:TiltEffect.IsTiltEnabled="True" Tap="ItemAlbum_Tap">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Image Source="{Binding Portada}" Width="80" Height="80" Stretch="UniformToFill" Margin="0,0,14,0"/>
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding Titulo}" Style="{StaticResource PhoneTextLargeStyle}" Margin="0,0,0,4"/>
+                    <TextBlock Text="{Binding Artista}" Style="{StaticResource PhoneTextSubtleStyle}" Margin="0,0,0,2"/>
+                    <TextBlock Text="{Binding Año}" Style="{StaticResource PhoneTextSmallStyle}" Foreground="{StaticResource PhoneSubtleBrush}"/>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+    </phone:PhoneApplicationPage.Resources>
+
     <!--LayoutRoot is the root grid where all page content is placed-->
-    <Grid x:Name="LayoutRoot" Background="Transparent" d:DataContext="{d:DesignData /SampleData/MainViewModelSampleData.xaml}">
-        <!--Pivot Control-->
-        <!--Pivot Control-->
-        <phone:Pivot x:Name="MainPivot" Title="TU BIBLIOTECA">
-            <!--Pivot item one-->
-            <phone:PivotItem x:Name="Playlists" Header="playlists">
-                <Grid>
-                    <TextBlock x:Name="textBlock2" TextWrapping="Wrap" FontFamily="{StaticResource PhoneFontFamilyLight}" Margin="10,0" FontWeight="Light" LineStackingStrategy="BlockLineHeight" LineHeight="37" FontSize="34" Foreground="#B2FFFFFF">
-                        <Run Text="Qué vacío está esto..."/>
-                        <LineBreak/>
-                        <Run Text="Explora el catálogo de Spotify y comienza a agregar música a tu biblioteca."/>
-                    </TextBlock>
-                </Grid>
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <phone:Pivot x:Name="MainPivot" Title="SPOTIFY">
+            <phone:PivotItem Header="playlists">
+                <Grid/>
             </phone:PivotItem>
-            <!-- Pivot 1: Álbumes -->
-            <phone:PivotItem x:Name="PivotAlbumes" Header="álbumes">
+
+            <!-- Pestaña Álbumes con LongListSelector nativo de WP8 y Sticky Headers -->
+            <phone:PivotItem Header="álbumes">
                 <Grid>
-                    <!-- Mensaje de estado vacío -->
-                    <TextBlock x:Name="txtVacioAlbumes"
-                               Text="Qué vacío está esto...&#x0a;Explora el catálogo de Spotify y comienza a agregar música a tu biblioteca."
-                               TextWrapping="Wrap"
-                               Foreground="#B2FFFFFF"
-                               Margin="12,24,12,0"
-                               Visibility="Collapsed" />
-
-                    <!-- LongListMultiSelector con soporte nativo de selección por toque izquierdo -->
-                    <toolkit:LongListMultiSelector x:Name="lstAlbumes"
-                                                   ItemsSource="{Binding Albumes}"
-                                                   Margin="0,0,0,76"
-                                                   toolkit:TiltEffect.IsTiltEnabled="True">
-                        <toolkit:LongListMultiSelector.ItemTemplate>
-                            <DataTemplate>
-                                <!-- Agregamos toolkit:TurnstileFeatherEffect.FeatheringIndex="0" para activar la cascada -->
-                                <Grid Margin="12,12,0,12" 
-              Background="Transparent" 
-              Tap="ItemAlbum_Tap"
-              toolkit:TurnstileFeatherEffect.FeatheringIndex="0">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-
-                                    <!-- Carátula del álbum -->
-                                    <Border Grid.Column="0" Width="68" Height="68" Background="#262626">
-                                        <Image Source="{Binding Portada}" Stretch="UniformToFill" />
-                                    </Border>
-
-                                    <!-- Textos -->
-                                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="14,0,0,0">
-                                        <TextBlock x:Name="txtTituloAlbum"
-                           Text="{Binding Titulo}"
-                           FontSize="28"
-                           FontFamily="{StaticResource PhoneFontFamilySemiBold}"
-                           Foreground="White"
-                           TextTrimming="WordEllipsis" />
-                                        <TextBlock Text="{Binding Artista}"
-                           FontSize="20"
-                           Foreground="#8AFFFFFF"
-                           Margin="0,2,0,0"
-                           TextTrimming="WordEllipsis" />
-                                    </StackPanel>
-                                </Grid>
-                            </DataTemplate>
-                        </toolkit:LongListMultiSelector.ItemTemplate>
-                    </toolkit:LongListMultiSelector>
-                </Grid>
-            </phone:PivotItem>
-            <!--Pivot item one-->
-            <phone:PivotItem x:Name="Canciones" Header="me gusta">
-                <Grid>
-                    <TextBlock x:Name="textBlock" TextWrapping="Wrap" FontFamily="{StaticResource PhoneFontFamilyLight}" Margin="10,0" FontWeight="Light" LineStackingStrategy="BlockLineHeight" LineHeight="37" FontSize="34" Foreground="#B2FFFFFF">
-                        <Run Text="Qué vacío está esto..."/>
-                        <LineBreak/>
-                        <Run Text="Explora el catálogo de Spotify y comienza a agregar música a tu biblioteca."/>
-                    </TextBlock>
+                    <TextBlock x:Name="txtVacioAlbumes" 
+                               Text="No tienes álbumes guardados" 
+                               Style="{StaticResource PhoneTextSubtleStyle}" 
+                               VerticalAlignment="Center" 
+                               HorizontalAlignment="Center" 
+                               Visibility="Collapsed"/>
                 </Grid>
             </phone:PivotItem>
 
-            <!--Pivot item two-->
-            <phone:PivotItem x:Name="Artistas" Header="artistas">
-                <Grid>
-                    <TextBlock x:Name="textBlock3" TextWrapping="Wrap" FontFamily="{StaticResource PhoneFontFamilyLight}" Margin="10,0" FontWeight="Light" LineStackingStrategy="BlockLineHeight" LineHeight="37" FontSize="34" Foreground="#B2FFFFFF">
-                        <Run Text="Qué vacío está esto..."/>
-                        <LineBreak/>
-                        <Run Text="Explora el catálogo de Spotify y comienza a agregar música a tu biblioteca."/>
-                    </TextBlock>
-                </Grid>
+            <phone:PivotItem Header="me gusta">
+                <Grid/>
+            </phone:PivotItem>
+            <phone:PivotItem Header="artistas">
+                <Grid/>
             </phone:PivotItem>
         </phone:Pivot>
     </Grid>
