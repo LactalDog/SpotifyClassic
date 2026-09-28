@@ -30,7 +30,7 @@ namespace SpotifyClassic
         {
             try
             {
-                if (App.ViewModel.Albumes == null || App.ViewModel.Albumes.Count == 0)
+                if (App.ViewModel.AlbumesAgrupados == null || App.ViewModel.AlbumesAgrupados.Count == 0)
                 {
                     txtVacioAlbumes.Visibility = Visibility.Visible;
                     lstAlbumes.Visibility = Visibility.Collapsed;

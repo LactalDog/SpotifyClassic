@@ -37,25 +37,6 @@ namespace SpotifyClassic.ViewModels
             }
         }
 
-        private string _sampleProperty = "Sample Runtime Property Value";
-        public string SampleProperty
-        {
-            get { return _sampleProperty; }
-            set
-            {
-                if (value != _sampleProperty)
-                {
-                    _sampleProperty = value;
-                    NotifyPropertyChanged("SampleProperty");
-                }
-            }
-        }
-
-        public string LocalizedSampleProperty
-        {
-            get { return AppResources.SampleProperty; }
-        }
-
         public bool IsDataLoaded { get; private set; }
 
         public void ActualizarAgrupacionAlbumes()
@@ -78,22 +59,14 @@ namespace SpotifyClassic.ViewModels
             Items.Add(new ItemViewModel() { LineOne = "me gusta" });
             Items.Add(new ItemViewModel() { LineOne = "artistas" });
 
-            Recientes.Clear();
-
-            Reproduciendo.Add(new PlayingModel()
-            {
-                Portada = "/Assets/NewsCovers/mf.png",
-                Tipo = "Álbum",
-                Titulo = "King of Having Fun",
-                Artista = "Medium Build"
-            });
-
             Albumes.Clear();
-            // Ruta corregida para buscar en la raíz del proyecto
-            Albumes.Add(new AlbumModel { Titulo = "AM", Artista = "Arctic Monkeys", Año = "2013", Portada = "/MusicPreview.png" });
-            Albumes.Add(new AlbumModel { Titulo = "Currents", Artista = "Tame Impala", Año = "2015", Portada = "/MusicPreview.png" });
-            Albumes.Add(new AlbumModel { Titulo = "King of Having Fun", Artista = "Medium Build", Año = "2024", Portada = "/MusicPreview.png" });
-            Albumes.Add(new AlbumModel { Titulo = "The New Abnormal", Artista = "The Strokes", Año = "2020", Portada = "/MusicPreview.png" });
+            // Colección con imágenes y metadatos adaptados al estilo de PicturesAlbum del Toolkit
+            Albumes.Add(new AlbumModel { Titulo = "AM", Artista = "Arctic Monkeys", Año = "2013", Portada = "/Assets/MusicPreview.png" });
+            Albumes.Add(new AlbumModel { Titulo = "Currents", Artista = "Tame Impala", Año = "2015", Portada = "/Assets/MusicPreview.png" });
+            Albumes.Add(new AlbumModel { Titulo = "King of Having Fun", Artista = "Medium Build", Año = "2024", Portada = "/Assets/MusicPreview.png" });
+            Albumes.Add(new AlbumModel { Titulo = "The New Abnormal", Artista = "The Strokes", Año = "2020", Portada = "/Assets/MusicPreview.png" });
+            Albumes.Add(new AlbumModel { Titulo = "Favourite Worst Nightmare", Artista = "Arctic Monkeys", Año = "2007", Portada = "/Assets/MusicPreview.png" });
+            Albumes.Add(new AlbumModel { Titulo = "Is This It", Artista = "The Strokes", Año = "2001", Portada = "/Assets/MusicPreview.png" });
 
             ActualizarAgrupacionAlbumes();
 

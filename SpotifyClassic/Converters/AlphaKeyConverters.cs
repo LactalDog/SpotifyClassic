@@ -1,10 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
-using SpotifyClassic.Data;
-using SpotifyClassic.ViewModels;
 
 namespace SpotifyClassic.Converters
 {
@@ -12,8 +11,8 @@ namespace SpotifyClassic.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var group = value as AlphaKeyGroup<AlbumModel>;
-            if (group != null && group.Count > 0)
+            ICollection collection = value as ICollection;
+            if (collection != null && collection.Count > 0)
             {
                 return (SolidColorBrush)Application.Current.Resources["PhoneAccentBrush"];
             }
@@ -31,8 +30,8 @@ namespace SpotifyClassic.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var group = value as AlphaKeyGroup<AlbumModel>;
-            if (group != null && group.Count > 0)
+            ICollection collection = value as ICollection;
+            if (collection != null && collection.Count > 0)
             {
                 return new SolidColorBrush(Colors.White);
             }
