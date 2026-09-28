@@ -45,7 +45,7 @@
     <Grid x:Name="LayoutRoot" Background="Transparent">
 
         <!-- AGREGADO: x:Name="MainPivot" para que C# pueda cambiar de pestaña -->
-        <phone:Pivot x:Name="MainPivot" Title="SPOTIFY CLASSIC">
+        <phone:Pivot x:Name="MainPivot" Title="BIBLIOTECA">
 
             <!-- PESTAÑA 0 -->
             <phone:PivotItem Header="playlists">
@@ -94,10 +94,14 @@
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
-                                    <Image Width="110" Height="110" Source="{Binding Portada}" VerticalAlignment="Top"/>
-                                    <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="12,0,0,0">
-                                        <TextBlock Text="{Binding Titulo}" Style="{StaticResource PhoneTextLargeStyle}" FontFamily="{StaticResource PhoneFontFamilySemiBold}" Margin="0,-6,0,0" TextWrapping="NoWrap"/>
-                                        <TextBlock Text="{Binding Artista}" Style="{StaticResource PhoneTextNormalStyle}" TextWrapping="NoWrap"/>
+                                    <Image x:Name="Portada" Width="150" Height="150" Source="{Binding Portada}" VerticalAlignment="Top"/>
+                                    <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Top">
+                                        <TextBlock x:Name="Titulo" Text="{Binding Titulo}" Style="{StaticResource PhoneTextLargeStyle}" FontFamily="{StaticResource PhoneFontFamilySemiLight}" TextWrapping="Wrap" Margin="0" LineStackingStrategy="BlockLineHeight" LineHeight="33" MaxHeight="66"/>
+                                        <TextBlock x:Name="Artista" Text="{Binding Artista}" Style="{StaticResource PhoneTextNormalStyle}" Margin="0" FontFamily="{StaticResource PhoneFontFamilySemiLight}" LineStackingStrategy="BlockLineHeight">
+                                            <TextBlock.Foreground>
+                                                <SolidColorBrush Color="{StaticResource PhoneTextMidContrastColor}"/>
+                                            </TextBlock.Foreground>
+                                        </TextBlock>
                                     </StackPanel>
                                 </Grid>
                             </DataTemplate>

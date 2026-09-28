@@ -61,8 +61,9 @@ namespace SpotifyClassic.ViewModels
 
             Albumes.Clear();
             // Colección con imágenes y metadatos adaptados al estilo de PicturesAlbum del Toolkit
-            Albumes.Add(new AlbumModel { Titulo = "AM", Artista = "Arctic Monkeys", Año = "2013", Portada = "/Assets/MusicPreview.png" });
-            Albumes.Add(new AlbumModel { Titulo = "Currents", Artista = "Tame Impala", Año = "2015", Portada = "/Assets/MusicPreview.png" });
+            Albumes.Add(new AlbumModel { Titulo = "Alan Wake 2 - The Lake House - 6 Deep Breaths by POE 1-52 screenshot", Artista = "Arctic Monkeys", Año = "2013", Portada = "/Assets/MusicPreview.png" });
+            Albumes.Add(new AlbumModel { Titulo = "American Horror Stories", Artista = "Lin Manuel Miranda", Año = "2013", Portada = "/Assets/MusicPreview.png" });
+            Albumes.Add(new AlbumModel { Titulo = "Currents", Artista = "taylor swift, lin manuel miranda, and Electronic arts music dicord label from 2015 Feat. Kesha from the black eyed peas", Año = "2015", Portada = "/Assets/MusicPreview.png" });
             Albumes.Add(new AlbumModel { Titulo = "King of Having Fun", Artista = "Medium Build", Año = "2024", Portada = "/Assets/MusicPreview.png" });
             Albumes.Add(new AlbumModel { Titulo = "The New Abnormal", Artista = "The Strokes", Año = "2020", Portada = "/Assets/MusicPreview.png" });
             Albumes.Add(new AlbumModel { Titulo = "Favourite Worst Nightmare", Artista = "Arctic Monkeys", Año = "2007", Portada = "/Assets/MusicPreview.png" });

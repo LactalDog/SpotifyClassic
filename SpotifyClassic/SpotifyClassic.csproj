@@ -212,7 +212,10 @@
     <Content Include="Assets\Covers\sh2.png" />
     <Content Include="Assets\Covers\thefame.png" />
     <Content Include="Assets\Covers\TWICE.jpg" />
+    <Content Include="Assets\GreyPreviewImage.png" />
     <Content Include="Assets\Logo.png" />
+    <Content Include="Assets\MusicPreview.png" />
+    <Content Include="Assets\MusicPreviewLong.png" />
     <Content Include="Assets\NewsCovers\1.png" />
     <Content Include="Assets\NewsCovers\beyon.png" />
     <Content Include="Assets\NewsCovers\juno.png" />
@@ -227,6 +230,7 @@
     <Content Include="Assets\SquareTile150x150.png" />
     <Content Include="Assets\SquareTile71x71.png" />
     <Content Include="Assets\StoreLogo.png" />
+    <Content Include="Assets\Video\Signup_h264.mp4" />
     <Content Include="Assets\WideLogo.png" />
     <Content Include="basecircle.png" />
     <Content Include="GreyPreviewImage.png" />
