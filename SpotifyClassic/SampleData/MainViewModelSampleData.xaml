@@ -1,4 +1,4 @@
-﻿<ViewModels:MainViewModel xmlns:ViewModels="clr-namespace:SpotifyClassic.ViewModels;assembly=SpotifyClassic" IsDataLoaded="True" LocalizedSampleProperty="Dolor enim sem sit magnis" SampleProperty="Vestibulum sed euismod vestibulum">
+﻿<ViewModels:MainViewModel xmlns:ViewModels="clr-namespace:SpotifyClassic.ViewModels;assembly=SpotifyClassic" IsDataLoaded="True">
     <ViewModels:MainViewModel.Items>
         <ViewModels:ItemViewModel LineOne="playlists"/>
         <ViewModels:ItemViewModel LineOne="álbumes"/>
