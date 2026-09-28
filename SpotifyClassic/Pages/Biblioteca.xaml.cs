@@ -6,13 +6,14 @@ using System.Windows.Media;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using SpotifyClassic.Animations;
+using SpotifyClassic.ViewModels;
 
 namespace SpotifyClassic
 {
     public partial class Biblioteca : PhoneApplicationPage
     {
-        // Guardamos el elemento seleccionado para garantizar que el retorno anime el mismo álbum
-        private FrameworkElement _ultimoElementoSeleccionado = null;
+        // Guardamos el modelo del álbum tocado para recuperar su contenedor al volver
+        private AlbumModel _albumSeleccionado = null;
 
         public Biblioteca()
         {
@@ -57,12 +58,33 @@ namespace SpotifyClassic
         {
             base.OnNavigatedTo(e);
 
-            // Si estamos regresando de AlbumPage, reasignamos la animación de retorno al elemento original
-            if (e.NavigationMode == NavigationMode.Back && _ultimoElementoSeleccionado != null)
+            // Al regresar desde AlbumPage, vinculamos el retorno exactamente al álbum que se seleccionó
+            if (e.NavigationMode == NavigationMode.Back && _albumSeleccionado != null)
             {
-                var navIn = new NavigationInTransition();
-                navIn.Backward = new ContinuumTransition(ContinuumTransitionMode.ContinuumBackwardInStoryboard, _ultimoElementoSeleccionado);
-                TransitionService.SetNavigationInTransition(this, navIn);
+                Dispatcher.BeginInvoke(() =>
+                {
+                    try
+                    {
+                        var container = lstAlbumes.ContainerFromItem(_albumSeleccionado) as FrameworkElement;
+                        FrameworkElement elementoRetorno = null;
+
+                        if (container != null)
+                        {
+                            elementoRetorno = FindChild<TextBlock>(container, "txtTituloAlbum") ?? container;
+                        }
+
+                        if (elementoRetorno != null)
+                        {
+                            var navIn = new NavigationInTransition();
+                            navIn.Backward = new ContinuumTransition(ContinuumTransitionMode.ContinuumBackwardInStoryboard, elementoRetorno);
+                            TransitionService.SetNavigationInTransition(this, navIn);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Aviso al vincular Continuum de retorno: " + ex.Message);
+                    }
+                });
             }
 
             if (NavigationContext.QueryString.ContainsKey("seccion"))
@@ -97,26 +119,27 @@ namespace SpotifyClassic
             var itemGrid = sender as FrameworkElement;
             if (itemGrid == null) return;
 
-            var albumSeleccionado = itemGrid.DataContext as ViewModels.AlbumModel;
-            if (albumSeleccionado == null) return;
+            _albumSeleccionado = itemGrid.DataContext as AlbumModel;
+            if (_albumSeleccionado == null) return;
 
-            // Buscamos el TextBlock específico del título
+            // Obtenemos el TextBlock del título de la fila seleccionada
             var txtTitulo = FindChild<TextBlock>(itemGrid, "txtTituloAlbum");
-            _ultimoElementoSeleccionado = (FrameworkElement)txtTitulo ?? itemGrid;
+            FrameworkElement elementoContinuum = (FrameworkElement)txtTitulo ?? itemGrid;
 
-            // Configuramos la transición de salida hacia adelante y la de retorno
+            // Configuramos la salida animada
             var navOut = new NavigationOutTransition();
-            navOut.Forward = new ContinuumTransition(ContinuumTransitionMode.ContinuumForwardOutStoryboard, _ultimoElementoSeleccionado);
+            navOut.Forward = new ContinuumTransition(ContinuumTransitionMode.ContinuumForwardOutStoryboard, elementoContinuum);
 
+            // Anticipamos la animación de vuelta sobre este mismo elemento
             var navIn = new NavigationInTransition();
-            navIn.Backward = new ContinuumTransition(ContinuumTransitionMode.ContinuumBackwardInStoryboard, _ultimoElementoSeleccionado);
+            navIn.Backward = new ContinuumTransition(ContinuumTransitionMode.ContinuumBackwardInStoryboard, elementoContinuum);
 
             TransitionService.SetNavigationOutTransition(this, navOut);
             TransitionService.SetNavigationInTransition(this, navIn);
 
             string url = string.Format("/Pages/AlbumPage.xaml?title={0}&artist={1}",
-                Uri.EscapeDataString(albumSeleccionado.Titulo ?? ""),
-                Uri.EscapeDataString(albumSeleccionado.Artista ?? ""));
+                Uri.EscapeDataString(_albumSeleccionado.Titulo ?? ""),
+                Uri.EscapeDataString(_albumSeleccionado.Artista ?? ""));
 
             NavigationService.Navigate(new Uri(url, UriKind.Relative));
         }

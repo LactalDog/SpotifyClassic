@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using SpotifyClassic.Animations;
@@ -11,12 +10,9 @@ namespace SpotifyClassic.Pages
         public AlbumPage()
         {
             InitializeComponent();
-            this.Loaded += AlbumPage_Loaded;
-        }
 
-        private void AlbumPage_Loaded(object sender, RoutedEventArgs e)
-        {
-            // Asignamos la transición de llegada hacia adelante y de salida hacia atrás
+            // Asignamos las transiciones de entrada y salida inmediatamente en el constructor
+            // para que no haya un marco en negro entre la salida de Biblioteca y la llegada a AlbumPage
             var navIn = new NavigationInTransition();
             navIn.Forward = new ContinuumTransition(ContinuumTransitionMode.ContinuumForwardInStoryboard, txtTituloDetalle);
 
@@ -33,7 +29,7 @@ namespace SpotifyClassic.Pages
 
             if (NavigationContext.QueryString.ContainsKey("title"))
             {
-                txtTituloDetalle.Text = NavigationContext.QueryString["title"];
+                txtTituloDetalle.Text = Uri.UnescapeDataString(NavigationContext.QueryString["title"]);
             }
         }
     }
