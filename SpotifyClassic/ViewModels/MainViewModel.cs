@@ -20,43 +20,8 @@ namespace SpotifyClassic.ViewModels
             this.Albumes = new ObservableCollection<AlbumModel>();
         }
 
-        /// <summary>
-        /// A collection for ItemViewModel objects.
-        /// </summary>
         public ObservableCollection<ItemViewModel> Items { get; private set; }
         public ObservableCollection<AlbumModel> Albumes { get; private set; }
-
-        private string _sampleProperty = "Sample Runtime Property Value";
-        /// <summary>
-        /// Sample ViewModel property; this property is used in the view to display its value using a Binding
-        /// </summary>
-        /// <returns></returns>
-        public string SampleProperty
-        {
-            get
-            {
-                return _sampleProperty;
-            }
-            set
-            {
-                if (value != _sampleProperty)
-                {
-                    _sampleProperty = value;
-                    NotifyPropertyChanged("SampleProperty");
-                }
-            }
-        }
-
-        /// <summary>
-        /// Sample property that returns a localized string
-        /// </summary>
-        public string LocalizedSampleProperty
-        {
-            get
-            {
-                return AppResources.SampleProperty;
-            }
-        }
 
         private List<AlphaKeyGroup<AlbumModel>> _albumesAgrupados;
         public List<AlphaKeyGroup<AlbumModel>> AlbumesAgrupados
@@ -72,11 +37,26 @@ namespace SpotifyClassic.ViewModels
             }
         }
 
-        public bool IsDataLoaded
+        private string _sampleProperty = "Sample Runtime Property Value";
+        public string SampleProperty
         {
-            get;
-            private set;
+            get { return _sampleProperty; }
+            set
+            {
+                if (value != _sampleProperty)
+                {
+                    _sampleProperty = value;
+                    NotifyPropertyChanged("SampleProperty");
+                }
+            }
         }
+
+        public string LocalizedSampleProperty
+        {
+            get { return AppResources.SampleProperty; }
+        }
+
+        public bool IsDataLoaded { get; private set; }
 
         public void ActualizarAgrupacionAlbumes()
         {
@@ -90,29 +70,32 @@ namespace SpotifyClassic.ViewModels
             }
         }
 
-        /// <summary>
-        /// Creates and adds a few ItemViewModel objects into the Items collection.
-        /// </summary>
         public void LoadData()
         {
-            // Sample data; replace with real data
+            Items.Clear();
             Items.Add(new ItemViewModel() { LineOne = "playlists" });
-            Items.Add(new ItemViewModel() { LineOne = "álbumes"});
+            Items.Add(new ItemViewModel() { LineOne = "álbumes" });
             Items.Add(new ItemViewModel() { LineOne = "me gusta" });
-            Items.Add(new ItemViewModel() { LineOne = "artistas"});
-            
+            Items.Add(new ItemViewModel() { LineOne = "artistas" });
+
             Recientes.Clear();
 
-            Reproduciendo.Add(new PlayingModel() { Portada = "/Assets/NewsCovers/mf.png", Tipo = "Álbum", Titulo = "King of Having Fun", Artista = "Medium Build" });
+            Reproduciendo.Add(new PlayingModel()
+            {
+                Portada = "/Assets/NewsCovers/mf.png",
+                Tipo = "Álbum",
+                Titulo = "King of Having Fun",
+                Artista = "Medium Build"
+            });
 
             Albumes.Clear();
-            Albumes.Add(new AlbumModel { Titulo = "AM", Artista = "Arctic Monkeys", Año = "2013", Portada = "/Assets/MusicPreview.png" });
-            Albumes.Add(new AlbumModel { Titulo = "Currents", Artista = "Tame Impala", Año = "2015", Portada = "/Assets/MusicPreview.png" });
-            Albumes.Add(new AlbumModel { Titulo = "King of Having Fun", Artista = "Medium Build", Año = "2024", Portada = "/Assets/MusicPreview.png" });
-            Albumes.Add(new AlbumModel { Titulo = "The New Abnormal", Artista = "The Strokes", Año = "2020", Portada = "/Assets/MusicPreview.png" });
+            // Ruta corregida para buscar en la raíz del proyecto
+            Albumes.Add(new AlbumModel { Titulo = "AM", Artista = "Arctic Monkeys", Año = "2013", Portada = "/MusicPreview.png" });
+            Albumes.Add(new AlbumModel { Titulo = "Currents", Artista = "Tame Impala", Año = "2015", Portada = "/MusicPreview.png" });
+            Albumes.Add(new AlbumModel { Titulo = "King of Having Fun", Artista = "Medium Build", Año = "2024", Portada = "/MusicPreview.png" });
+            Albumes.Add(new AlbumModel { Titulo = "The New Abnormal", Artista = "The Strokes", Año = "2020", Portada = "/MusicPreview.png" });
 
             ActualizarAgrupacionAlbumes();
-
 
             IsDataLoaded = true;
         }
@@ -135,7 +118,7 @@ namespace SpotifyClassic.ViewModels
         public string Titulo { get; set; }
         public string Portada { get; set; }
         public string Bajada { get; set; }
-        public string Uri { get; set; } // ¡Propiedad requerida!
+        public string Uri { get; set; }
     }
 
     public class NewsModel

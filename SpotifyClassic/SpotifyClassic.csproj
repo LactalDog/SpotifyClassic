@@ -91,6 +91,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AlphaKeyGroup.cs" />
+    <Compile Include="Converters\AlphaKeyConverters.cs" />
     <Compile Include="Pages\AcercaDe.xaml.cs">
       <DependentUpon>AcercaDe.xaml</DependentUpon>
     </Compile>

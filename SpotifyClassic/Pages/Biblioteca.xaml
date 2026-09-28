@@ -5,6 +5,7 @@
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:converters="clr-namespace:SpotifyClassic.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -14,68 +15,84 @@
     SupportedOrientations="Portrait" Orientation="Portrait"
     shell:SystemTray.IsVisible="True">
 
-    <!-- 1. LOS RECURSOS DEBEN DEFINIRSE PRIMERO QUE TODO -->
     <phone:PhoneApplicationPage.Resources>
+        <!-- Convertidores de casillas de la JumpList -->
+        <converters:GroupToBackgroundBrushValueConverter x:Key="BackgroundConverter"/>
+        <converters:GroupToForegroundBrushValueConverter x:Key="ForegroundConverter"/>
 
-        <!-- Sticky Header (tile con la letra que se queda fijado al scrollear) -->
+        <!-- Sticky Header (Tile azul flotante al desplazarse) -->
         <DataTemplate x:Key="AlbumGroupHeaderTemplate">
-            <Border Background="Transparent" Padding="5">
+            <Border Background="Transparent" Margin="6,0,0,12">
                 <Border Background="{StaticResource PhoneAccentBrush}" 
-                        BorderBrush="{StaticResource PhoneAccentBrush}" 
-                        BorderThickness="2" 
                         Width="62" Height="62" 
-                        Margin="0,0,18,0" 
                         HorizontalAlignment="Left">
                     <TextBlock Text="{Binding Key}" 
                                Foreground="{StaticResource PhoneForegroundBrush}" 
                                FontSize="36" 
-                               Padding="6" 
                                FontFamily="{StaticResource PhoneFontFamilySemiLight}"
+                               Margin="8,0,0,4"
                                HorizontalAlignment="Left" 
-                               VerticalAlignment="Center"/>
+                               VerticalAlignment="Bottom"/>
                 </Border>
             </Border>
         </DataTemplate>
 
-        <!-- Template para cada álbum en la lista -->
-        <DataTemplate x:Key="AlbumItemTemplate">
-            <Grid Margin="0,8,0,8" toolkit:TiltEffect.IsTiltEnabled="True" Tap="ItemAlbum_Tap">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Image Source="{Binding Portada}" Width="80" Height="80" Stretch="UniformToFill" Margin="0,0,14,0"/>
-                <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                    <TextBlock Text="{Binding Titulo}" Style="{StaticResource PhoneTextLargeStyle}" Margin="0,0,0,4"/>
-                    <TextBlock Text="{Binding Artista}" Style="{StaticResource PhoneTextSubtleStyle}" Margin="0,0,0,2"/>
-                    <TextBlock Text="{Binding Año}" Style="{StaticResource PhoneTextSmallStyle}" Foreground="{StaticResource PhoneSubtleBrush}"/>
-                </StackPanel>
-            </Grid>
-        </DataTemplate>
-
-        <!-- JumpList (grilla alfabética emergente para saltar de letra) -->
+        <!-- JumpList idéntica a LongListSelectorSample de WP8 Toolkit -->
         <Style x:Key="AlbumJumpListStyle" TargetType="phone:LongListSelector">
             <Setter Property="GridCellSize" Value="113,113"/>
             <Setter Property="LayoutMode" Value="Grid" />
+            <Setter Property="Margin" Value="18,0,0,0"/>
             <Setter Property="ItemTemplate">
                 <Setter.Value>
                     <DataTemplate>
-                        <Border Background="{StaticResource PhoneAccentBrush}" 
+                        <Border Background="{Binding Converter={StaticResource BackgroundConverter}}" 
                                 Width="99" Height="99" Margin="6">
+                            <!-- Tipografía Segoe WP SemiLight a 42px con peso normal idéntica al Toolkit -->
                             <TextBlock Text="{Binding Key}" 
-                                       Foreground="{StaticResource PhoneForegroundBrush}" 
-                                       Style="{StaticResource PhoneTextExtraLargeStyle}"
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center"/>
+                                       Foreground="{Binding Converter={StaticResource ForegroundConverter}}" 
+                                       FontSize="42" 
+                                       FontFamily="{StaticResource PhoneFontFamilySemiLight}"
+                                       FontWeight="Normal"
+                                       Margin="10,0,0,10" 
+                                       HorizontalAlignment="Left" 
+                                       VerticalAlignment="Bottom"/>
                         </Border>
                     </DataTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
 
+        <!-- Template de ítem con verificación y fallback de imagen -->
+        <DataTemplate x:Key="AlbumItemTemplate">
+            <Grid Margin="12,8,0,12" toolkit:TiltEffect.IsTiltEnabled="True" Tap="ItemAlbum_Tap">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Cuadro de portada con tamaño exacto de álbum (62x62) -->
+                <Border Width="62" Height="62" Background="{StaticResource PhoneChromeBrush}" Margin="0,0,14,0" VerticalAlignment="Top">
+                    <Image Source="{Binding Portada}" 
+                           Stretch="UniformToFill" 
+                           Width="62" Height="62"/>
+                </Border>
+
+                <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="0,-2,0,0">
+                    <TextBlock Text="{Binding Titulo}" 
+                               Style="{StaticResource PhoneTextLargeStyle}" 
+                               Margin="0,0,0,2"/>
+                    <TextBlock Text="{Binding Artista}" 
+                               Style="{StaticResource PhoneTextSubtleStyle}" 
+                               Margin="0,0,0,2"/>
+                    <TextBlock Text="{Binding Año}" 
+                               Style="{StaticResource PhoneTextSmallStyle}" 
+                               Foreground="{StaticResource PhoneSubtleBrush}"/>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
     </phone:PhoneApplicationPage.Resources>
 
-    <!-- 2. TRANSICIONES TURNSTILEFEATHER OFICIALES -->
+    <!-- TurnstileFeather Transitions oficiales -->
     <toolkit:TransitionService.NavigationInTransition>
         <toolkit:NavigationInTransition>
             <toolkit:NavigationInTransition.Backward>
@@ -98,17 +115,17 @@
         </toolkit:NavigationOutTransition>
     </toolkit:TransitionService.NavigationOutTransition>
 
-    <!-- 3. INTERFAZ PRINCIPAL -->
     <Grid x:Name="LayoutRoot" Background="Transparent">
-        <phone:Pivot x:Name="MainPivot" Title="SPOTIFY">
+        <phone:Pivot x:Name="MainPivot" Title="SPOTIFY"
+                     toolkit:TurnstileFeatherEffect.FeatheringIndex="0">
 
             <phone:PivotItem Header="playlists">
                 <Grid/>
             </phone:PivotItem>
 
-            <!-- Pestaña Álbumes con LongListSelector nativo de WP8 y Sticky Headers -->
+            <!-- Pestaña Álbumes -->
             <phone:PivotItem Header="álbumes">
-                <Grid>
+                <Grid Margin="-12,0,-12,0">
                     <TextBlock x:Name="txtVacioAlbumes" 
                                Text="No tienes álbumes guardados" 
                                Style="{StaticResource PhoneTextSubtleStyle}" 
@@ -116,6 +133,7 @@
                                HorizontalAlignment="Center" 
                                Visibility="Collapsed"/>
 
+                    <!-- HideEmptyGroups en True para ocultar grupos sin ítems -->
                     <phone:LongListSelector x:Name="lstAlbumes"
                                             ItemsSource="{Binding AlbumesAgrupados}"
                                             HideEmptyGroups="True"
@@ -135,7 +153,6 @@
             <phone:PivotItem Header="artistas">
                 <Grid/>
             </phone:PivotItem>
-
         </phone:Pivot>
     </Grid>
 
