@@ -68,7 +68,6 @@
 
     <Grid x:Name="LayoutRoot" Background="{StaticResource PhoneBackgroundBrush}">
 
-        <!-- RESTAURADO: El FeatheringIndex="0" es OBLIGATORIO para que inicie la cascada -->
         <phone:Pivot x:Name="MainPivot" Title="BIBLIOTECA" toolkit:TurnstileFeatherEffect.FeatheringIndex="0">
 
             <phone:PivotItem x:Name="Playlists" Header="playlists">
@@ -83,7 +82,7 @@
                                VerticalAlignment="Center" 
                                Style="{StaticResource PhoneTextSubtleStyle}" 
                                Visibility="Collapsed"
-                               toolkit:TurnstileFeatherEffect.FeatheringIndex="1" />
+                               toolkit:TurnstileFeatherEffect.FeatheringIndex="1" toolkit:SlideInEffect.LineIndex="1" FontFamily="{StaticResource PhoneFontFamilySemiLight}"/>
 
                     <!-- AGREGADO: SelectionChanged -->
                     <phone:LongListSelector x:Name="lstAlbumes"
@@ -119,10 +118,10 @@
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
-                                    <Image x:Name="Portada" Width="150" Height="150" Source="{Binding Portada}" VerticalAlignment="Top"/>
+                                    <Image x:Name="Portada" Width="150" Height="150" Source="{Binding Portada}" VerticalAlignment="Top" toolkit:SlideInEffect.LineIndex="1"/>
                                     <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Top">
-                                        <TextBlock x:Name="Titulo" Text="{Binding Titulo}" Style="{StaticResource PhoneTextLargeStyle}" FontFamily="{StaticResource PhoneFontFamilySemiLight}" TextWrapping="Wrap" Margin="0" LineStackingStrategy="BlockLineHeight" LineHeight="33" MaxHeight="66"/>
-                                        <TextBlock x:Name="Artista" Text="{Binding Artista}" Style="{StaticResource PhoneTextNormalStyle}" Margin="0" FontFamily="{StaticResource PhoneFontFamilySemiLight}" LineStackingStrategy="BlockLineHeight">
+                                        <TextBlock x:Name="Titulo" Text="{Binding Titulo}" Style="{StaticResource PhoneTextLargeStyle}" FontFamily="{StaticResource PhoneFontFamilySemiLight}" TextWrapping="Wrap" Margin="0" LineStackingStrategy="BlockLineHeight" LineHeight="33" MaxHeight="66" toolkit:SlideInEffect.LineIndex="2"/>
+                                        <TextBlock x:Name="Artista" Text="{Binding Artista}" Style="{StaticResource PhoneTextNormalStyle}" Margin="0" FontFamily="{StaticResource PhoneFontFamilySemiLight}" LineStackingStrategy="BlockLineHeight" toolkit:SlideInEffect.LineIndex="3">
                                             <TextBlock.Foreground>
                                                 <SolidColorBrush Color="{StaticResource PhoneTextMidContrastColor}"/>
                                             </TextBlock.Foreground>

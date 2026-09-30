@@ -42,17 +42,16 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Margin="24,17,24,0" toolkit:TurnstileFeatherEffect.FeatheringIndex="1">
-            <TextBlock x:Name="Tipo" Text="SOLAR FIELDS" Style="{StaticResource PhoneTextNormalStyle}" Padding="0" Margin="0" FontFamily="Portable User Interface"/>
-            <TextBlock x:Name="Tipo_Copy" Text="álbum" Style="{StaticResource PhoneTextNormalStyle}" Padding="0" Margin="0,0,0,12" FontFamily="{StaticResource PhoneFontFamilySemiLight}" FontSize="{StaticResource PanoramaItemHeaderFontSize}"/>
+        <StackPanel Grid.Row="0" Margin="24,17,24,0">
+            <TextBlock x:Name="Artista_titulo" Text="SOLAR FIELDS" Style="{StaticResource PhoneTextNormalStyle}" Padding="0" Margin="0" FontFamily="{StaticResource PhoneFontFamilySemiBold}" toolkit:TurnstileFeatherEffect.FeatheringIndex="1"/>
+            <TextBlock x:Name="Tipo_titulo" Text="álbum" Style="{StaticResource PhoneTextNormalStyle}" Padding="0" Margin="0,0,0,12" FontFamily="{StaticResource PhoneFontFamilySemiLight}" FontSize="{StaticResource PanoramaItemHeaderFontSize}" toolkit:TurnstileFeatherEffect.FeatheringIndex="2"/>
         </StackPanel>
 
         <toolkit:LongListMultiSelector x:Name="ListaCanciones" Grid.Row="1" Margin="0" 
                                        toolkit:TiltEffect.IsTiltEnabled="True">
 
             <toolkit:LongListMultiSelector.ListHeader>
-                <StackPanel Orientation="Horizontal" Margin="24,0,0,24"
-                            toolkit:TurnstileFeatherEffect.FeatheringIndex="2">
+                <StackPanel Orientation="Horizontal" Margin="24,0,0,24" toolkit:TurnstileFeatherEffect.FeatheringIndex="3">
                     <Grid>
                         <Image x:Name="Portada" Width="190" Source="/Assets/MusicPreview.png" Stretch="UniformToFill" HorizontalAlignment="Right" Height="190"/>
                         <Border x:Name="drop_shadow" BorderThickness="1" Padding="0" HorizontalAlignment="Right" Height="70" VerticalAlignment="Top" Width="70">
@@ -71,7 +70,7 @@
                     </Grid>
 
                     <StackPanel Margin="12,0,0,0">
-                        <TextBlock x:Name="Detalles_Copy" Text="2009" Margin="0" Style="{StaticResource PhoneTextSubtleStyle}" FontFamily="Portable User Interface" LineStackingStrategy="BlockLineHeight" TextWrapping="Wrap" LineHeight="22" MaxHeight="44">
+                        <TextBlock x:Name="Año" Text="2009" Margin="0" Style="{StaticResource PhoneTextSubtleStyle}" FontFamily="Portable User Interface" LineStackingStrategy="BlockLineHeight" TextWrapping="Wrap" LineHeight="22" MaxHeight="44">
                             <TextBlock.Foreground>
                                 <SolidColorBrush Color="{StaticResource PhoneTextMidContrastColor}"/>
                             </TextBlock.Foreground>
@@ -97,7 +96,7 @@
 
             <toolkit:LongListMultiSelector.ItemTemplate>
                 <DataTemplate>
-                    <Grid Margin="0,0,0,16" toolkit:TurnstileFeatherEffect.FeatheringIndex="3">
+                    <Grid Margin="0,0,0,16" toolkit:TurnstileFeatherEffect.FeatheringIndex="4">
                         <StackPanel>
                             <TextBlock Text="{Binding Titulo}" Style="{StaticResource PhoneTextNormalStyle}" Margin="0" FontSize="{StaticResource PhoneFontSizeLarge}" FontFamily="{StaticResource PhoneFontFamilySemiLight}"/>
                             <TextBlock Text="{Binding Artista}" Style="{StaticResource PhoneTextSubtleStyle}" Margin="0" FontFamily="{StaticResource PhoneFontFamilySemiLight}"/>
