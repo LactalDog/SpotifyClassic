@@ -1053,7 +1053,7 @@
                                     <Button x:Name="repeat" Content="Button" Style="{StaticResource Botoncito2}" FontFamily="Portable User Interface"/>
                                 </StackPanel>
                                 <StackPanel Height="52" VerticalAlignment="Bottom">
-                                    <Button x:Name="queue" Content="Button" Style="{StaticResource Botoncito3}" Width="78" VerticalAlignment="Bottom"/>
+                                    <Button x:Name="queue" Content="Button" Style="{StaticResource Botoncito3}" Width="78" VerticalAlignment="Bottom" Click="iralista"/>
                                 </StackPanel>
                             </Grid>
                         </StackPanel>

@@ -1658,5 +1658,10 @@ namespace SpotifyClassic
                 }
             }
         }
+
+        private void iralista(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/Pages/Queue.xaml", UriKind.Relative));
+        }
     }
 }

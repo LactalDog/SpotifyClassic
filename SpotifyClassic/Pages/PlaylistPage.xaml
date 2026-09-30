@@ -43,7 +43,7 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Margin="24,17,24,0">
-            <TextBlock x:Name="Artista_titulo" Text="SPOTIFY" Style="{StaticResource PhoneTextNormalStyle}" Padding="0" Margin="0" FontFamily="{StaticResource PhoneFontFamilySemiBold}" toolkit:TurnstileFeatherEffect.FeatheringIndex="1"/>
+            <TextBlock x:Name="Artista_titulo" Text="SPOTIFY" Style="{StaticResource PhoneTextNormalStyle}" Padding="0" Margin="0" FontFamily="Portable User Interface" toolkit:TurnstileFeatherEffect.FeatheringIndex="1"/>
             <TextBlock x:Name="Tipo_titulo" Text="playlist" Style="{StaticResource PhoneTextNormalStyle}" Padding="0" Margin="0,0,0,12" FontFamily="{StaticResource PhoneFontFamilySemiLight}" FontSize="{StaticResource PanoramaItemHeaderFontSize}" toolkit:TurnstileFeatherEffect.FeatheringIndex="2"/>
         </StackPanel>
 
@@ -91,8 +91,7 @@
 
             <toolkit:LongListMultiSelector.ItemTemplate>
                 <DataTemplate>
-                    <DataTemplate>
-                        <Grid Margin="-12,8,0,8" toolkit:TurnstileFeatherEffect.FeatheringIndex="4">
+                        <Grid Margin="0,8,0,8" toolkit:TurnstileFeatherEffect.FeatheringIndex="4">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
@@ -108,7 +107,6 @@
                             </StackPanel>
                         </Grid>
                     </DataTemplate>
-                </DataTemplate>
             </toolkit:LongListMultiSelector.ItemTemplate>
 
         </toolkit:LongListMultiSelector>
