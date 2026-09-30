@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Controls; // AGREGADO: Necesario para SelectionChangedEventArgs
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using SpotifyClassic.ViewModels;
@@ -11,45 +12,26 @@ namespace SpotifyClassic
         public Biblioteca()
         {
             InitializeComponent();
-
-            if (!App.ViewModel.IsDataLoaded)
-            {
-                App.ViewModel.LoadData();
-            }
-
-            DataContext = App.ViewModel;
-            this.Loaded += Biblioteca_Loaded;
-        }
-
-        private void Biblioteca_Loaded(object sender, RoutedEventArgs e)
-        {
-            ActualizarEstadoVacio();
-        }
-
-        private void ActualizarEstadoVacio()
-        {
-            try
-            {
-                if (App.ViewModel.AlbumesAgrupados == null || App.ViewModel.AlbumesAgrupados.Count == 0)
-                {
-                    txtVacioAlbumes.Visibility = Visibility.Visible;
-                    lstAlbumes.Visibility = Visibility.Collapsed;
-                }
-                else
-                {
-                    txtVacioAlbumes.Visibility = Visibility.Collapsed;
-                    lstAlbumes.Visibility = Visibility.Visible;
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Error al actualizar estado vacío: " + ex.Message);
-            }
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
+
+            if (e.NavigationMode != NavigationMode.Back)
+            {
+                if (!App.ViewModel.IsDataLoaded)
+                {
+                    App.ViewModel.LoadData();
+                }
+
+                DataContext = App.ViewModel;
+                ActualizarEstadoVacio();
+
+                // Forzamos al layout a actualizarse para que las listas y el TiltEffect 
+                // se acoplen al árbol visual inmediatamente.
+                this.UpdateLayout();
+            }
 
             if (NavigationContext.QueryString.ContainsKey("seccion"))
             {
@@ -76,18 +58,46 @@ namespace SpotifyClassic
             }
         }
 
-        private void ItemAlbum_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        private void ActualizarEstadoVacio()
         {
-            var itemGrid = sender as FrameworkElement;
-            if (itemGrid == null) return;
+            try
+            {
+                if (App.ViewModel.AlbumesAgrupados == null || App.ViewModel.AlbumesAgrupados.Count == 0)
+                {
+                    txtVacioAlbumes.Visibility = Visibility.Visible;
+                    lstAlbumes.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    txtVacioAlbumes.Visibility = Visibility.Collapsed;
+                    lstAlbumes.Visibility = Visibility.Visible;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error al actualizar estado vacío: " + ex.Message);
+            }
+        }
 
-            var album = itemGrid.DataContext as AlbumModel;
+        // AGREGADO: Evento nativo del selector
+        private void lstAlbumes_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // Verificamos selección válida
+            if (lstAlbumes.SelectedItem == null) return;
+
+            var album = lstAlbumes.SelectedItem as AlbumModel;
+
+            // Limpiamos la selección inmediatamente ANTES de navegar. 
+            // Esto finaliza el ciclo Manipulation del TiltEffect evitando que se trabe al volver.
+            lstAlbumes.SelectedItem = null;
+
             if (album == null) return;
 
             string url = string.Format("/Pages/AlbumPage.xaml?title={0}&artist={1}",
                 Uri.EscapeDataString(album.Titulo ?? ""),
                 Uri.EscapeDataString(album.Artista ?? ""));
 
+            // Navegamos de manera directa y síncrona para anclarnos al hilo de animación principal.
             NavigationService.Navigate(new Uri(url, UriKind.Relative));
         }
     }

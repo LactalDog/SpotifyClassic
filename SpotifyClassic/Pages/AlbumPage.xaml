@@ -42,20 +42,18 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Bloque superior fijo (Título) -->
         <StackPanel Grid.Row="0" Margin="24,17,24,0" 
                     toolkit:TurnstileFeatherEffect.FeatheringIndex="0">
             <TextBlock x:Name="Tipo" Text="SOLAR FIELDS" Style="{StaticResource PhoneTextNormalStyle}" Padding="0" Margin="0" FontFamily="Portable User Interface"/>
             <TextBlock x:Name="Tipo_Copy" Text="álbum" Style="{StaticResource PhoneTextNormalStyle}" Padding="0" Margin="0,0,0,12" FontFamily="{StaticResource PhoneFontFamilySemiLight}" FontSize="{StaticResource PanoramaItemHeaderFontSize}"/>
         </StackPanel>
 
-        <!-- Bloque inferior de desplazamiento (Detalles de Portada + Canciones) -->
         <toolkit:LongListMultiSelector x:Name="ListaCanciones" Grid.Row="1" Margin="0" 
-                               toolkit:TurnstileFeatherEffect.FeatheringIndex="1" toolkit:TiltEffect.IsTiltEnabled="True">
+                                       toolkit:TiltEffect.IsTiltEnabled="True">
 
-            <!-- El ListHeader se desplaza junto con los elementos de la lista -->
             <toolkit:LongListMultiSelector.ListHeader>
-                <StackPanel Orientation="Horizontal" Margin="24,0,0,24">
+                <StackPanel Orientation="Horizontal" Margin="24,0,0,24"
+                            toolkit:TurnstileFeatherEffect.FeatheringIndex="1">
                     <Grid>
                         <Image x:Name="Portada" Width="190" Source="/Assets/MusicPreview.png" Stretch="UniformToFill" HorizontalAlignment="Right" Height="190"/>
                         <Border x:Name="drop_shadow" BorderThickness="1" Padding="0" HorizontalAlignment="Right" Height="70" VerticalAlignment="Top" Width="70">
@@ -98,13 +96,9 @@
                 </StackPanel>
             </toolkit:LongListMultiSelector.ListHeader>
 
-            <!-- NUEVO: Diseño para cada canción -->
             <toolkit:LongListMultiSelector.ItemTemplate>
                 <DataTemplate>
-                    <Grid Margin="0,0,0,16">
-                        
-                        <!-- El texto se conecta (Binding) con las propiedades de la clase de C# -->
-                        
+                    <Grid Margin="0,0,0,16" toolkit:TurnstileFeatherEffect.FeatheringIndex="2">
                         <StackPanel>
                             <TextBlock Text="{Binding Titulo}" Style="{StaticResource PhoneTextNormalStyle}" Margin="0" FontSize="{StaticResource PhoneFontSizeLarge}" FontFamily="{StaticResource PhoneFontFamilySemiLight}"/>
                             <TextBlock Text="{Binding Artista}" Style="{StaticResource PhoneTextSubtleStyle}" Margin="0" FontFamily="{StaticResource PhoneFontFamilySemiLight}"/>
@@ -115,5 +109,4 @@
 
         </toolkit:LongListMultiSelector>
     </Grid>
-
 </phone:PhoneApplicationPage>

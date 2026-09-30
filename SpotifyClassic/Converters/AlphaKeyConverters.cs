@@ -14,7 +14,8 @@ namespace SpotifyClassic.Converters
             ICollection collection = value as ICollection;
             if (collection != null && collection.Count > 0)
             {
-                return (SolidColorBrush)Application.Current.Resources["PhoneAccentBrush"];
+                // Devuelve tu recurso global personalizado
+                return (SolidColorBrush)Application.Current.Resources["SpotifyAccentBrush"];
             }
 
             return (SolidColorBrush)Application.Current.Resources["PhoneChromeBrush"];

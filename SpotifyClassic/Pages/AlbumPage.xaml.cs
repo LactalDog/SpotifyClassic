@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using System.Collections.Generic;
@@ -10,14 +11,20 @@ namespace SpotifyClassic.Pages
         public AlbumPage()
         {
             InitializeComponent();
+        }
 
-            // Llamamos a la función que cargará los datos al iniciar la página
-            CargarDatosDePrueba();
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            if (e.NavigationMode != NavigationMode.Back)
+            {
+                CargarDatosDePrueba();
+            }
         }
 
         private void CargarDatosDePrueba()
         {
-            // 1. Creamos una lista de prueba con la estructura de nuestra clase
             List<Cancion> listaDeCanciones = new List<Cancion>
             {
                 new Cancion { Numero = "1", Titulo = "Introduction", Artista = "Solar Fields", Duracion = "5:22" },
@@ -28,13 +35,14 @@ namespace SpotifyClassic.Pages
                 new Cancion { Numero = "6", Titulo = "Mirror's Edge Theme", Artista = "Solar Fields", Duracion = "5:12" }
             };
 
-            // 2. Asignamos la lista al origen de datos del selector
-            // Nota: "ListaCanciones" será el nombre que le daremos al control en el XAML en el Paso 2
             ListaCanciones.ItemsSource = listaDeCanciones;
+
+            // LA CLAVE: Forzamos la construcción del árbol visual del LongListMultiSelector
+            // ANTES de que TurnstileFeatherTransition capture la pantalla buscando los índices.
+            this.UpdateLayout();
         }
     }
 
-    // Clase sencilla para estructurar los datos de cada canción
     public class Cancion
     {
         public string Numero { get; set; }

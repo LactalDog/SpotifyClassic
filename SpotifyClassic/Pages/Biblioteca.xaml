@@ -7,6 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:converters="clr-namespace:SpotifyClassic.Converters"
     mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
@@ -16,19 +17,40 @@
     shell:SystemTray.Opacity="0.0"
     shell:SystemTray.BackgroundColor="Transparent">
 
-    <phone:PhoneApplicationPage.Resources>
-        <!-- Convertidores para los colores del JumpList -->
-        <phone:JumpListItemBackgroundConverter x:Key="BackgroundConverter"/>
-        <phone:JumpListItemForegroundConverter x:Key="ForegroundConverter"/>
+    <toolkit:TransitionService.NavigationInTransition>
+        <toolkit:NavigationInTransition>
+            <toolkit:NavigationInTransition.Backward>
+                <toolkit:TurnstileFeatherTransition Mode="BackwardIn"/>
+            </toolkit:NavigationInTransition.Backward>
+            <toolkit:NavigationInTransition.Forward>
+                <toolkit:TurnstileFeatherTransition Mode="ForwardIn"/>
+            </toolkit:NavigationInTransition.Forward>
+        </toolkit:NavigationInTransition>
+    </toolkit:TransitionService.NavigationInTransition>
 
-        <!-- Estilo de la cuadrícula (Grid) para el selector alfabético -->
+    <toolkit:TransitionService.NavigationOutTransition>
+        <toolkit:NavigationOutTransition>
+            <toolkit:NavigationOutTransition.Backward>
+                <toolkit:TurnstileFeatherTransition Mode="BackwardOut"/>
+            </toolkit:NavigationOutTransition.Backward>
+            <toolkit:NavigationOutTransition.Forward>
+                <toolkit:TurnstileFeatherTransition Mode="ForwardOut"/>
+            </toolkit:NavigationOutTransition.Forward>
+        </toolkit:NavigationOutTransition>
+    </toolkit:TransitionService.NavigationOutTransition>
+
+    <phone:PhoneApplicationPage.Resources>
+        <converters:GroupToBackgroundBrushValueConverter x:Key="BackgroundConverter"/>
+        <converters:GroupToForegroundBrushValueConverter x:Key="ForegroundConverter"/>
+
         <Style x:Key="JumpListStyle" TargetType="phone:LongListSelector">
             <Setter Property="Margin" Value="12,6,0,0"/>
             <Setter Property="ItemTemplate">
                 <Setter.Value>
                     <DataTemplate>
                         <Border Background="{Binding Converter={StaticResource BackgroundConverter}}"
-                                Margin="6" toolkit:TiltEffect.IsTiltEnabled="True">
+                                Margin="6" toolkit:TiltEffect.IsTiltEnabled="True"
+                                toolkit:TurnstileFeatherEffect.FeatheringIndex="1">
                             <TextBlock Text="{Binding Key}" 
                                        FontFamily="{StaticResource PhoneFontFamilySemiBold}"
                                        FontSize="48" Margin="12,0,0,0"
@@ -45,37 +67,37 @@
 
     <Grid x:Name="LayoutRoot" Background="Transparent">
 
-        <!-- AGREGADO: x:Name="MainPivot" para que C# pueda cambiar de pestaña -->
-        <phone:Pivot x:Name="MainPivot" Title="BIBLIOTECA">
+        <!-- QUITADO: El FeatheringIndex="0" del Pivot -->
+        <phone:Pivot x:Name="MainPivot" Title="BIBLIOTECA" toolkit:TurnstileFeatherEffect.FeatheringIndex="1">
 
-            <!-- PESTAÑA 0 -->
             <phone:PivotItem Header="playlists">
                 <Grid/>
             </phone:PivotItem>
 
-            <!-- PESTAÑA 1 -->
             <phone:PivotItem Header="álbumes">
                 <Grid>
-                    <!-- AGREGADO: x:Name="txtVacioAlbumes" para el estado de lista vacía -->
                     <TextBlock x:Name="txtVacioAlbumes" 
                                Text="No tienes álbumes guardados." 
                                HorizontalAlignment="Center" 
                                VerticalAlignment="Center" 
                                Style="{StaticResource PhoneTextSubtleStyle}" 
-                               Visibility="Collapsed" />
+                               Visibility="Collapsed"
+                               toolkit:TurnstileFeatherEffect.FeatheringIndex="1" />
 
-                    <!-- AGREGADO: x:Name="lstAlbumes" para poblar la lista desde C# -->
+                    <!-- AGREGADO: SelectionChanged -->
                     <phone:LongListSelector x:Name="lstAlbumes"
                                             IsGroupingEnabled="true" 
                                             HideEmptyGroups="true"
                                             ItemsSource="{Binding AlbumesAgrupados}"
                                             JumpListStyle="{StaticResource JumpListStyle}"
+                                            SelectionChanged="lstAlbumes_SelectionChanged"
                                             toolkit:TiltEffect.IsTiltEnabled="True">
 
                         <phone:LongListSelector.GroupHeaderTemplate>
                             <DataTemplate>
-                                <Border Background="Transparent" Margin="12,8,0,8">
-                                    <Border Background="#FF83C541"
+                                <Border Background="Transparent" Margin="12,8,0,8"
+                                        toolkit:TurnstileFeatherEffect.FeatheringIndex="1">
+                                    <Border Background="{StaticResource SpotifyAccentBrush}"
                                             Padding="8,0,0,0" Width="62" Height="62"                
                                             HorizontalAlignment="Left">
                                         <TextBlock Text="{Binding Key}" 
@@ -89,8 +111,9 @@
 
                         <phone:LongListSelector.ItemTemplate>
                             <DataTemplate>
-                                <!-- AGREGADO: Evento Tap="ItemAlbum_Tap" para abrir el álbum al tocarlo -->
-                                <Grid Margin="12,8,0,8" Background="Transparent" Tap="ItemAlbum_Tap">
+                                <!-- QUITADO: El evento Tap directo del Grid -->
+                                <Grid Margin="12,8,0,8" Background="Transparent" 
+                                      toolkit:TurnstileFeatherEffect.FeatheringIndex="1">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
@@ -111,17 +134,14 @@
                 </Grid>
             </phone:PivotItem>
 
-            <!-- PESTAÑA 2 -->
             <phone:PivotItem Header="me gusta">
                 <Grid/>
             </phone:PivotItem>
 
-            <!-- PESTAÑA 3 -->
             <phone:PivotItem Header="artistas">
                 <Grid/>
             </phone:PivotItem>
 
         </phone:Pivot>
     </Grid>
-
 </phone:PhoneApplicationPage>

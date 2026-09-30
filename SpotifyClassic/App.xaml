@@ -18,6 +18,7 @@
 
         <local:LocalizedStrings xmlns:local="clr-namespace:SpotifyClassic" x:Key="LocalizedStrings"/>
         <Color x:Key="SpotifyAccentColor">#FF83C541</Color>
+        <SolidColorBrush x:Key="SpotifyAccentBrush" Color="{StaticResource SpotifyAccentColor}" />
     </Application.Resources>
 
     <Application.ApplicationLifetimeObjects>
