@@ -37,9 +37,8 @@ namespace SpotifyClassic.Pages
 
             ListaCanciones.ItemsSource = listaDeCanciones;
 
-            // LA CLAVE: Forzamos la construcción del árbol visual del LongListMultiSelector
-            // ANTES de que TurnstileFeatherTransition capture la pantalla buscando los índices.
-            this.UpdateLayout();
+            // ELIMINADO: this.UpdateLayout(); 
+            // El Toolkit necesita que el layout ocurra de forma natural para interceptar el evento LayoutUpdated e indexar los elementos para el TurnstileFeather.
         }
     }
 

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Controls; // AGREGADO: Necesario para SelectionChangedEventArgs
+using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using SpotifyClassic.ViewModels;
@@ -28,9 +28,17 @@ namespace SpotifyClassic
                 DataContext = App.ViewModel;
                 ActualizarEstadoVacio();
 
-                // Forzamos al layout a actualizarse para que las listas y el TiltEffect 
-                // se acoplen al árbol visual inmediatamente.
-                this.UpdateLayout();
+                // ELIMINADO: this.UpdateLayout();
+            }
+            else
+            {
+                // Limpiamos la selección de la lista AL VOLVER a la página (Back).
+                // Esto permite que el árbol visual no se invalide durante las transiciones 
+                // pero a su vez reinicia el TiltEffect para la próxima interacción.
+                if (lstAlbumes.SelectedItem != null)
+                {
+                    lstAlbumes.SelectedItem = null;
+                }
             }
 
             if (NavigationContext.QueryString.ContainsKey("seccion"))
@@ -79,25 +87,19 @@ namespace SpotifyClassic
             }
         }
 
-        // AGREGADO: Evento nativo del selector
         private void lstAlbumes_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Verificamos selección válida
             if (lstAlbumes.SelectedItem == null) return;
 
             var album = lstAlbumes.SelectedItem as AlbumModel;
-
-            // Limpiamos la selección inmediatamente ANTES de navegar. 
-            // Esto finaliza el ciclo Manipulation del TiltEffect evitando que se trabe al volver.
-            lstAlbumes.SelectedItem = null;
-
             if (album == null) return;
 
             string url = string.Format("/Pages/AlbumPage.xaml?title={0}&artist={1}",
                 Uri.EscapeDataString(album.Titulo ?? ""),
                 Uri.EscapeDataString(album.Artista ?? ""));
 
-            // Navegamos de manera directa y síncrona para anclarnos al hilo de animación principal.
+            // No limpiamos el elemento seleccionado aquí antes de navegar, 
+            // ya que al hacerlo causamos un cambio visual (Unselected) que interrumpe a TransitionService.
             NavigationService.Navigate(new Uri(url, UriKind.Relative));
         }
     }
