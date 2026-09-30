@@ -18,10 +18,12 @@ namespace SpotifyClassic.ViewModels
             this.Sugerencias = new ObservableCollection<SuggestionsModel>();
             this.Reproduciendo = new ObservableCollection<PlayingModel>();
             this.Albumes = new ObservableCollection<AlbumModel>();
+            this.CancionesMeGusta = new ObservableCollection<TrackModel>();
         }
 
         public ObservableCollection<ItemViewModel> Items { get; private set; }
         public ObservableCollection<AlbumModel> Albumes { get; private set; }
+        public ObservableCollection<TrackModel> CancionesMeGusta { get; private set; }
 
         private List<AlphaKeyGroup<AlbumModel>> _albumesAgrupados;
         public List<AlphaKeyGroup<AlbumModel>> AlbumesAgrupados
@@ -37,6 +39,20 @@ namespace SpotifyClassic.ViewModels
             }
         }
 
+        private List<AlphaKeyGroup<TrackModel>> _cancionesMeGustaAgrupadas;
+        public List<AlphaKeyGroup<TrackModel>> CancionesMeGustaAgrupadas
+        {
+            get { return _cancionesMeGustaAgrupadas; }
+            set
+            {
+                if (_cancionesMeGustaAgrupadas != value)
+                {
+                    _cancionesMeGustaAgrupadas = value;
+                    NotifyPropertyChanged("CancionesMeGustaAgrupadas");
+                }
+            }
+        }
+
         public bool IsDataLoaded { get; private set; }
 
         public void ActualizarAgrupacionAlbumes()
@@ -47,6 +63,18 @@ namespace SpotifyClassic.ViewModels
                     Albumes,
                     CultureInfo.CurrentUICulture,
                     (AlbumModel s) => string.IsNullOrEmpty(s.Titulo) ? "#" : s.Titulo,
+                    true);
+            }
+        }
+
+        public void ActualizarAgrupacionCancionesMeGusta()
+        {
+            if (CancionesMeGusta != null)
+            {
+                CancionesMeGustaAgrupadas = AlphaKeyGroup<TrackModel>.CreateGroups(
+                    CancionesMeGusta,
+                    CultureInfo.CurrentUICulture,
+                    (TrackModel s) => string.IsNullOrEmpty(s.Titulo) ? "#" : s.Titulo,
                     true);
             }
         }
@@ -69,7 +97,16 @@ namespace SpotifyClassic.ViewModels
             Albumes.Add(new AlbumModel { Titulo = "Favourite Worst Nightmare", Artista = "Arctic Monkeys", Año = "2007", Portada = "/Assets/MusicPreview.png" });
             Albumes.Add(new AlbumModel { Titulo = "Is This It", Artista = "The Strokes", Año = "2001", Portada = "/Assets/MusicPreview.png" });
 
+            CancionesMeGusta.Add(new TrackModel { Titulo = "A new dawn: I like it", Artista = "Arctic Monkeys", Portada = "/Assets/MusicPreview.png" });
+            CancionesMeGusta.Add(new TrackModel { Titulo = "American in my heart", Artista = "Lin Manuel Miranda", Portada = "/Assets/MusicPreview.png" });
+            CancionesMeGusta.Add(new TrackModel { Titulo = "Currents", Artista = "taylor swift, lin manuel miranda, and Electronic arts music dicord label from 2015 Feat. Kesha from the black eyed peas", Portada = "/Assets/MusicPreview.png" });
+            CancionesMeGusta.Add(new TrackModel { Titulo = "King of Having Fun", Artista = "Medium Build", Portada = "/Assets/MusicPreview.png" });
+            CancionesMeGusta.Add(new TrackModel { Titulo = "The New Big Day", Artista = "The Strokes", Portada = "/Assets/MusicPreview.png" });
+            CancionesMeGusta.Add(new TrackModel { Titulo = "Fest in the night", Artista = "Arctic Monkeys", Portada = "/Assets/MusicPreview.png" });
+            CancionesMeGusta.Add(new TrackModel { Titulo = "Silents In The Wild", Artista = "The Strokes", Portada = "/Assets/MusicPreview.png" });
+
             ActualizarAgrupacionAlbumes();
+            ActualizarAgrupacionCancionesMeGusta();
 
             IsDataLoaded = true;
         }
@@ -91,6 +128,7 @@ namespace SpotifyClassic.ViewModels
     {
         public string Titulo { get; set; }
         public string Portada { get; set; }
+        public string Artista { get; set; }
         public string Bajada { get; set; }
         public string Uri { get; set; }
     }
