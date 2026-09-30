@@ -20,7 +20,7 @@
     <toolkit:TransitionService.NavigationInTransition>
         <toolkit:NavigationInTransition>
             <toolkit:NavigationInTransition.Backward>
-                <toolkit:TurnstileFeatherTransition Mode="BackwardIn"/>
+                <toolkit:TurnstileTransition Mode="BackwardIn"/>
             </toolkit:NavigationInTransition.Backward>
             <toolkit:NavigationInTransition.Forward>
                 <toolkit:TurnstileFeatherTransition Mode="ForwardIn"/>
@@ -34,7 +34,8 @@
                 <toolkit:TurnstileFeatherTransition Mode="BackwardOut"/>
             </toolkit:NavigationOutTransition.Backward>
             <toolkit:NavigationOutTransition.Forward>
-                <toolkit:TurnstileFeatherTransition Mode="ForwardOut"/>
+                <!-- CLAVE: Salir de la biblioteca de forma sólida para no colapsar el Pivot -->
+                <toolkit:TurnstileTransition Mode="ForwardOut"/>
             </toolkit:NavigationOutTransition.Forward>
         </toolkit:NavigationOutTransition>
     </toolkit:TransitionService.NavigationOutTransition>
@@ -65,16 +66,16 @@
         </Style>
     </phone:PhoneApplicationPage.Resources>
 
-    <Grid x:Name="LayoutRoot">
+    <Grid x:Name="LayoutRoot" Background="{StaticResource PhoneBackgroundBrush}">
 
-        <!-- QUITADO: El FeatheringIndex="0" del Pivot -->
-        <phone:Pivot x:Name="MainPivot" Title="BIBLIOTECA" toolkit:TurnstileFeatherEffect.FeatheringIndex="1">
+        <!-- RESTAURADO: El FeatheringIndex="0" es OBLIGATORIO para que inicie la cascada -->
+        <phone:Pivot x:Name="MainPivot" Title="BIBLIOTECA" toolkit:TurnstileFeatherEffect.FeatheringIndex="0">
 
-            <phone:PivotItem Header="playlists">
+            <phone:PivotItem x:Name="Playlists" Header="playlists">
                 <Grid/>
             </phone:PivotItem>
 
-            <phone:PivotItem Header="álbumes">
+            <phone:PivotItem x:Name="Albumes" Header="álbumes">
                 <Grid>
                     <TextBlock x:Name="txtVacioAlbumes" 
                                Text="No tienes álbumes guardados." 
@@ -134,11 +135,11 @@
                 </Grid>
             </phone:PivotItem>
 
-            <phone:PivotItem Header="me gusta">
+            <phone:PivotItem x:Name="Canciones" Header="me gusta">
                 <Grid/>
             </phone:PivotItem>
 
-            <phone:PivotItem Header="artistas">
+            <phone:PivotItem x:Name="Artistas" Header="artistas">
                 <Grid/>
             </phone:PivotItem>
 

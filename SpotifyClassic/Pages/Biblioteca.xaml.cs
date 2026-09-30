@@ -82,18 +82,11 @@ namespace SpotifyClassic
             var album = lstAlbumes.SelectedItem as AlbumModel;
             if (album == null) return;
 
-            // 1. Iniciamos la navegación de forma normal.
-            NavigationService.Navigate(new Uri("/Pages/TurnstileFeatherEffectSample1.xaml", UriKind.Relative));
+            // Navega a la página de prueba del toolkit (o a tu AlbumPage)
+            NavigationService.Navigate(new Uri("/Pages/AlbumPage.xaml", UriKind.Relative));
 
-            // 2. Limpiamos la selección asíncronamente. 
-            // Al encolarlo en el Dispatcher, el borrado de selección no invalida
-            // el layout actual hasta que la transición de salida haya comenzado.
-            // Al presionar el botón "Atrás", la lista ya estará deseleccionada
-            // y no habrá cambios visuales que rompan la animación de retorno.
-            Dispatcher.BeginInvoke(() =>
-            {
-                lstAlbumes.SelectedItem = null;
-            });
+            // ELIMINADO: Todo el bloque Dispatcher.BeginInvoke que limpiaba el SelectedItem.
+            // No debes modificar NADA de la UI después de llamar a Navigate.
         }
     }
 }
