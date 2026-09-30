@@ -674,6 +674,15 @@
                     </phone:LongListSelector.Foreground>
                 </phone:LongListSelector>
             </phone:PanoramaItem>
+            <controls:PanoramaItem x:Name="Artistas" Header="artistas top">
+                <Grid Margin="20,0,0,0">
+                    <toolkit:HubTile HorizontalAlignment="Left" d1:LayoutOverrides="Width, Height" VerticalAlignment="Top">
+                        <toolkit:HubTile.Background>
+                            <SolidColorBrush Color="{StaticResource SpotifyAccentColor}"/>
+                        </toolkit:HubTile.Background>
+                    </toolkit:HubTile>
+                </Grid>
+            </controls:PanoramaItem>
 
             <phone:PanoramaItem x:Name="Reproduciendo" Header="está sonando">
                 <phone:PanoramaItem.Foreground>
