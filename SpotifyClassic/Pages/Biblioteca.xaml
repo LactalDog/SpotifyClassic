@@ -65,7 +65,7 @@
         </Style>
     </phone:PhoneApplicationPage.Resources>
 
-    <Grid x:Name="LayoutRoot" Background="Transparent">
+    <Grid x:Name="LayoutRoot">
 
         <!-- QUITADO: El FeatheringIndex="0" del Pivot -->
         <phone:Pivot x:Name="MainPivot" Title="BIBLIOTECA" toolkit:TurnstileFeatherEffect.FeatheringIndex="1">

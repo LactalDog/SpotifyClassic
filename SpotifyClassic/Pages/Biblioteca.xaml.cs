@@ -27,18 +27,6 @@ namespace SpotifyClassic
 
                 DataContext = App.ViewModel;
                 ActualizarEstadoVacio();
-
-                // ELIMINADO: this.UpdateLayout();
-            }
-            else
-            {
-                // Limpiamos la selección de la lista AL VOLVER a la página (Back).
-                // Esto permite que el árbol visual no se invalide durante las transiciones 
-                // pero a su vez reinicia el TiltEffect para la próxima interacción.
-                if (lstAlbumes.SelectedItem != null)
-                {
-                    lstAlbumes.SelectedItem = null;
-                }
             }
 
             if (NavigationContext.QueryString.ContainsKey("seccion"))
@@ -94,13 +82,18 @@ namespace SpotifyClassic
             var album = lstAlbumes.SelectedItem as AlbumModel;
             if (album == null) return;
 
-            string url = string.Format("/Pages/AlbumPage.xaml?title={0}&artist={1}",
-                Uri.EscapeDataString(album.Titulo ?? ""),
-                Uri.EscapeDataString(album.Artista ?? ""));
+            // 1. Iniciamos la navegación de forma normal.
+            NavigationService.Navigate(new Uri("/Pages/TurnstileFeatherEffectSample1.xaml", UriKind.Relative));
 
-            // No limpiamos el elemento seleccionado aquí antes de navegar, 
-            // ya que al hacerlo causamos un cambio visual (Unselected) que interrumpe a TransitionService.
-            NavigationService.Navigate(new Uri(url, UriKind.Relative));
+            // 2. Limpiamos la selección asíncronamente. 
+            // Al encolarlo en el Dispatcher, el borrado de selección no invalida
+            // el layout actual hasta que la transición de salida haya comenzado.
+            // Al presionar el botón "Atrás", la lista ya estará deseleccionada
+            // y no habrá cambios visuales que rompan la animación de retorno.
+            Dispatcher.BeginInvoke(() =>
+            {
+                lstAlbumes.SelectedItem = null;
+            });
         }
     }
 }
