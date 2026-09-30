@@ -19,11 +19,14 @@ namespace SpotifyClassic.ViewModels
             this.Reproduciendo = new ObservableCollection<PlayingModel>();
             this.Albumes = new ObservableCollection<AlbumModel>();
             this.CancionesMeGusta = new ObservableCollection<TrackModel>();
+            this.Playlists = new ObservableCollection<PlaylistModel>();
+            this.Artistas = new ObservableCollection<ArtistModel>();
         }
 
         public ObservableCollection<ItemViewModel> Items { get; private set; }
         public ObservableCollection<AlbumModel> Albumes { get; private set; }
         public ObservableCollection<TrackModel> CancionesMeGusta { get; private set; }
+        public ObservableCollection<PlaylistModel> Playlists { get; private set; }
 
         private List<AlphaKeyGroup<AlbumModel>> _albumesAgrupados;
         public List<AlphaKeyGroup<AlbumModel>> AlbumesAgrupados
@@ -39,6 +42,20 @@ namespace SpotifyClassic.ViewModels
             }
         }
 
+        private List<AlphaKeyGroup<PlaylistModel>> _playlistsAgrupadas;
+        public List<AlphaKeyGroup<PlaylistModel>> PlaylistsAgrupadas
+        {
+            get { return _playlistsAgrupadas; }
+            set
+            {
+                if (_playlistsAgrupadas != value)
+                {
+                    _playlistsAgrupadas = value;
+                    NotifyPropertyChanged("PlaylistsAgrupadas");
+                }
+            }
+        }
+
         private List<AlphaKeyGroup<TrackModel>> _cancionesMeGustaAgrupadas;
         public List<AlphaKeyGroup<TrackModel>> CancionesMeGustaAgrupadas
         {
@@ -49,6 +66,22 @@ namespace SpotifyClassic.ViewModels
                 {
                     _cancionesMeGustaAgrupadas = value;
                     NotifyPropertyChanged("CancionesMeGustaAgrupadas");
+                }
+            }
+        }
+
+        public ObservableCollection<ArtistModel> Artistas { get; private set; }
+
+        private List<AlphaKeyGroup<ArtistModel>> _artistasAgrupados;
+        public List<AlphaKeyGroup<ArtistModel>> ArtistasAgrupados
+        {
+            get { return _artistasAgrupados; }
+            set
+            {
+                if (_artistasAgrupados != value)
+                {
+                    _artistasAgrupados = value;
+                    NotifyPropertyChanged("ArtistasAgrupados");
                 }
             }
         }
@@ -79,6 +112,31 @@ namespace SpotifyClassic.ViewModels
             }
         }
 
+        public void ActualizarAgrupacionPlaylists()
+        {
+            if (Playlists != null)
+            {
+                PlaylistsAgrupadas = AlphaKeyGroup<PlaylistModel>.CreateGroups(
+                    Playlists,
+                    CultureInfo.CurrentUICulture,
+                    (PlaylistModel s) => string.IsNullOrEmpty(s.Titulo) ? "#" : s.Titulo,
+                    true);
+            }
+        }
+
+        public void ActualizarAgrupacionArtistas()
+        {
+            if (Artistas != null)
+            {
+                ArtistasAgrupados = AlphaKeyGroup<ArtistModel>.CreateGroups(
+                    Artistas,
+                    CultureInfo.CurrentUICulture,
+                    (ArtistModel s) => string.IsNullOrEmpty(s.Nombre) ? "#" : s.Nombre,
+                    true);
+            }
+        }
+
+
         public void LoadData()
         {
             Items.Clear();
@@ -105,8 +163,27 @@ namespace SpotifyClassic.ViewModels
             CancionesMeGusta.Add(new TrackModel { Titulo = "Fest in the night", Artista = "Arctic Monkeys", Portada = "/Assets/MusicPreview.png" });
             CancionesMeGusta.Add(new TrackModel { Titulo = "Silents In The Wild", Artista = "The Strokes", Portada = "/Assets/MusicPreview.png" });
 
+            Playlists.Clear();
+            Playlists.Add(new PlaylistModel { Titulo = "Topsify Argentina", Creador = "Spotify", Portada = "/Assets/MusicPreview.png" });
+            Playlists.Add(new PlaylistModel { Titulo = "Rock Classics", Creador = "Juan Pérez", Portada = "/Assets/MusicPreview.png" });
+            Playlists.Add(new PlaylistModel { Titulo = "Focus para Programar", Creador = "Ivanna", Portada = "/Assets/MusicPreview.png" });
+            Playlists.Add(new PlaylistModel { Titulo = "Discover Weekly", Creador = "Spotify", Portada = "/Assets/MusicPreview.png" });
+            Playlists.Add(new PlaylistModel { Titulo = "Gym Motivation", Creador = "Ricardo", Portada = "/Assets/MusicPreview.png" });
+            Playlists.Add(new PlaylistModel { Titulo = "Viaje al Sur", Creador = "Godoy Tiago Joaquín", Portada = "/Assets/MusicPreview.png" });
+
+            Artistas.Clear();
+            Artistas.Add(new ArtistModel { Nombre = "Arctic Monkeys", Portada = "/Assets/MusicPreview.png" });
+            Artistas.Add(new ArtistModel { Nombre = "Lin Manuel Miranda", Portada = "/Assets/MusicPreview.png" });
+            Artistas.Add(new ArtistModel { Nombre = "Medium Build", Portada = "/Assets/MusicPreview.png" });
+            Artistas.Add(new ArtistModel { Nombre = "The Strokes", Portada = "/Assets/MusicPreview.png" });
+            Artistas.Add(new ArtistModel { Nombre = "Solar Fields", Portada = "/Assets/MusicPreview.png" });
+            Artistas.Add(new ArtistModel { Nombre = "Taylor Swift", Portada = "/Assets/MusicPreview.png" });
+
+            ActualizarAgrupacionArtistas();
+
             ActualizarAgrupacionAlbumes();
             ActualizarAgrupacionCancionesMeGusta();
+            ActualizarAgrupacionPlaylists();
 
             IsDataLoaded = true;
         }
@@ -122,6 +199,62 @@ namespace SpotifyClassic.ViewModels
         public ObservableCollection<NewsModel> Novedades { get; private set; }
         public ObservableCollection<SuggestionsModel> Sugerencias { get; private set; }
         public ObservableCollection<PlayingModel> Reproduciendo { get; private set; }
+    }
+
+    // 1. Añadir el nuevo modelo al final del archivo (fuera de la clase MainViewModel)
+    public class PlaylistModel : INotifyPropertyChanged
+    {
+        private string _titulo;
+        public string Titulo
+        {
+            get { return _titulo; }
+            set { _titulo = value; NotifyPropertyChanged("Titulo"); }
+        }
+
+        private string _creador;
+        public string Creador
+        {
+            get { return _creador; }
+            set { _creador = value; NotifyPropertyChanged("Creador"); }
+        }
+
+        private string _portada;
+        public string Portada
+        {
+            get { return _portada; }
+            set { _portada = value; NotifyPropertyChanged("Portada"); }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+
+    public class ArtistModel : INotifyPropertyChanged
+    {
+        private string _nombre;
+        public string Nombre
+        {
+            get { return _nombre; }
+            set { _nombre = value; NotifyPropertyChanged("Nombre"); }
+        }
+
+        private string _portada;
+        public string Portada
+        {
+            get { return _portada; }
+            set { _portada = value; NotifyPropertyChanged("Portada"); }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 
     public class TrackModel
@@ -198,5 +331,7 @@ namespace SpotifyClassic.ViewModels
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
+
+       
     }
 }

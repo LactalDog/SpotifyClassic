@@ -67,6 +67,9 @@
         <DataTemplate x:Key="DataTemplate1">
             <Grid Height="70"/>
         </DataTemplate>
+        <DataTemplate x:Key="DataTemplate2">
+            <Grid Height="70"/>
+        </DataTemplate>
     </phone:PhoneApplicationPage.Resources>
 
     <Grid x:Name="LayoutRoot" Background="{StaticResource PhoneBackgroundBrush}">
@@ -74,7 +77,62 @@
         <phone:Pivot x:Name="MainPivot" Title="BIBLIOTECA" toolkit:TurnstileFeatherEffect.FeatheringIndex="0">
 
             <phone:PivotItem x:Name="Playlists" Header="playlists">
-                <Grid/>
+                <Grid>
+                    <TextBlock x:Name="txtVacioPlaylists" 
+                   Text="No tienes playlists guardadas." 
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Center" 
+                   Style="{StaticResource PhoneTextSubtleStyle}" 
+                   Visibility="Collapsed"
+                   toolkit:TurnstileFeatherEffect.FeatheringIndex="1" toolkit:SlideInEffect.LineIndex="1" FontFamily="{StaticResource PhoneFontFamilySemiLight}"/>
+
+                    <phone:LongListSelector x:Name="lstPlaylists"
+                                IsGroupingEnabled="true" 
+                                HideEmptyGroups="true"
+                                ItemsSource="{Binding PlaylistsAgrupadas}"
+                                JumpListStyle="{StaticResource JumpListStyle}"
+                                SelectionChanged="lstPlaylists_SelectionChanged"
+                                toolkit:TiltEffect.IsTiltEnabled="True" ListFooterTemplate="{StaticResource DataTemplate2}">
+
+                        <phone:LongListSelector.GroupHeaderTemplate>
+                            <DataTemplate>
+                                <Border Background="Transparent" Margin="12,8,0,8"
+                            toolkit:TurnstileFeatherEffect.FeatheringIndex="1">
+                                    <Border Background="{StaticResource SpotifyAccentBrush}"
+                                Padding="8,0,0,0" Width="62" Height="62"                
+                                HorizontalAlignment="Left">
+                                        <TextBlock Text="{Binding Key}" 
+                                       Foreground="#FFFFFF" FontSize="48"
+                                       FontFamily="{StaticResource PhoneFontFamilySemiLight}"
+                                       HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                                    </Border>
+                                </Border>
+                            </DataTemplate>
+                        </phone:LongListSelector.GroupHeaderTemplate>
+
+                        <phone:LongListSelector.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="12,8,0,8" Background="Transparent" 
+                          toolkit:TurnstileFeatherEffect.FeatheringIndex="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Image x:Name="Portada" Width="150" Height="150" Source="{Binding Portada}" VerticalAlignment="Top" toolkit:SlideInEffect.LineIndex="1"/>
+                                    <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Top">
+                                        <TextBlock x:Name="Titulo" Text="{Binding Titulo}" Style="{StaticResource PhoneTextLargeStyle}" FontFamily="{StaticResource PhoneFontFamilySemiLight}" TextWrapping="Wrap" Margin="0" LineStackingStrategy="BlockLineHeight" LineHeight="33" MaxHeight="66" toolkit:SlideInEffect.LineIndex="2"/>
+                                        <!-- Cambiamos Artista por Creador -->
+                                        <TextBlock x:Name="Creador" Text="{Binding Creador}" Style="{StaticResource PhoneTextNormalStyle}" Margin="0" FontFamily="{StaticResource PhoneFontFamilySemiLight}" LineStackingStrategy="BlockLineHeight" toolkit:SlideInEffect.LineIndex="3">
+                                            <TextBlock.Foreground>
+                                                <SolidColorBrush Color="{StaticResource PhoneTextMidContrastColor}"/>
+                                            </TextBlock.Foreground>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </phone:LongListSelector.ItemTemplate>
+                    </phone:LongListSelector>
+                </Grid>
             </phone:PivotItem>
 
             <phone:PivotItem x:Name="Albumes" Header="álbumes">
@@ -189,7 +247,58 @@
             </phone:PivotItem>
 
             <phone:PivotItem x:Name="Artistas" Header="artistas">
-                <Grid/>
+                <Grid>
+                    <TextBlock x:Name="txtVacioArtistas" 
+                   Text="No sigues a ningún artista." 
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Center" 
+                   Style="{StaticResource PhoneTextSubtleStyle}" 
+                   Visibility="Collapsed"
+                   toolkit:TurnstileFeatherEffect.FeatheringIndex="1" toolkit:SlideInEffect.LineIndex="1" FontFamily="{StaticResource PhoneFontFamilySemiLight}"/>
+
+                    <phone:LongListSelector x:Name="lstArtistas"
+                                IsGroupingEnabled="true" 
+                                HideEmptyGroups="true"
+                                ItemsSource="{Binding ArtistasAgrupados}"
+                                JumpListStyle="{StaticResource JumpListStyle}"
+                                SelectionChanged="lstArtistas_SelectionChanged"
+                                toolkit:TiltEffect.IsTiltEnabled="True">
+
+                        <phone:LongListSelector.GroupHeaderTemplate>
+                            <DataTemplate>
+                                <Border Background="Transparent" Margin="12,8,0,8"
+                            toolkit:TurnstileFeatherEffect.FeatheringIndex="1">
+                                    <Border Background="{StaticResource SpotifyAccentBrush}"
+                                Padding="8,0,0,0" Width="62" Height="62"                
+                                HorizontalAlignment="Left">
+                                        <TextBlock Text="{Binding Key}" 
+                                       Foreground="#FFFFFF" FontSize="48"
+                                       FontFamily="{StaticResource PhoneFontFamilySemiLight}"
+                                       HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                                    </Border>
+                                </Border>
+                            </DataTemplate>
+                        </phone:LongListSelector.GroupHeaderTemplate>
+
+                        <phone:LongListSelector.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="12,8,0,8" Background="Transparent" 
+                          toolkit:TurnstileFeatherEffect.FeatheringIndex="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Imagen del artista -->
+                                    <Image Width="62" Height="62" Source="{Binding Portada}" VerticalAlignment="Center" toolkit:SlideInEffect.LineIndex="1"/>
+
+                                    <!-- Solo el nombre, centrado verticalmente, con el estilo de fuente grande -->
+                                    <TextBlock Grid.Column="1" Text="{Binding Nombre}" Style="{StaticResource PhoneTextExtraLargeStyle}" FontFamily="{StaticResource PhoneFontFamilySemiLight}" Margin="15,0,0,0" VerticalAlignment="Center" toolkit:SlideInEffect.LineIndex="2" FontSize="36"/>
+                                </Grid>
+                            </DataTemplate>
+                        </phone:LongListSelector.ItemTemplate>
+                    </phone:LongListSelector>
+                </Grid>
             </phone:PivotItem>
 
         </phone:Pivot>

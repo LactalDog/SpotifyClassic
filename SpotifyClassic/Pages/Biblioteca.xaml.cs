@@ -11,6 +11,7 @@ namespace SpotifyClassic
 {
     public partial class Biblioteca : PhoneApplicationPage
     {
+        private ApplicationBar barraPlaylists; // NUEVO
         private ApplicationBar barraCancionesDefault;
         private ApplicationBar barraSeleccion;
 
@@ -18,14 +19,22 @@ namespace SpotifyClassic
         {
             InitializeComponent();
             ConstruirBarrasDinamicas();
-
-            // Asignar el evento SelectionChanged al Pivot principal
             MainPivot.SelectionChanged += MainPivot_SelectionChanged;
         }
 
         private void ConstruirBarrasDinamicas()
         {
-            // 1. Barra específica para la pestaña "Me gusta" (Permite activar selección)
+            // 0. NUEVO: Barra específica para Playlists
+            barraPlaylists = new ApplicationBar();
+            barraPlaylists.Mode = ApplicationBarMode.Default;
+            barraPlaylists.Opacity = 0.99;
+
+            ApplicationBarIconButton btnCrearPlaylist = new ApplicationBarIconButton(new Uri("/Toolkit.Content/ApplicationBar.Add.png", UriKind.Relative));
+            btnCrearPlaylist.Text = "crear";
+            btnCrearPlaylist.Click += BtnCrearPlaylist_Click;
+            barraPlaylists.Buttons.Add(btnCrearPlaylist);
+
+            // 1. Barra específica para la pestaña "Me gusta"
             barraCancionesDefault = new ApplicationBar();
             barraCancionesDefault.Mode = ApplicationBarMode.Default;
             barraCancionesDefault.Opacity = 0.99;
@@ -56,7 +65,6 @@ namespace SpotifyClassic
             barraSeleccion.Buttons.Add(btnCola);
         }
 
-        // --- GESTIÓN DE VISTAS (PIVOT) ---
         private void MainPivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ActualizarBarraSegunSeleccion();
@@ -64,28 +72,38 @@ namespace SpotifyClassic
 
         private void ActualizarBarraSegunSeleccion()
         {
-            // El índice 2 corresponde a la pestaña "me gusta"
-            if (MainPivot.SelectedIndex == 2)
+            if (MainPivot.SelectedIndex == 0) // Pestaña Playlists
+            {
+                if (ListaCancionesMeGusta != null && ListaCancionesMeGusta.IsSelectionEnabled)
+                {
+                    ListaCancionesMeGusta.IsSelectionEnabled = false;
+                }
+                this.ApplicationBar = barraPlaylists;
+            }
+            else if (MainPivot.SelectedIndex == 2) // Pestaña Me Gusta
             {
                 if (ListaCancionesMeGusta != null && ListaCancionesMeGusta.IsSelectionEnabled)
                     this.ApplicationBar = barraSeleccion;
                 else
                     this.ApplicationBar = barraCancionesDefault;
             }
-            else
+            else // Pestañas Álbumes, Artistas
             {
-                // Apagar el modo selección automáticamente al cambiar de pestaña
                 if (ListaCancionesMeGusta != null && ListaCancionesMeGusta.IsSelectionEnabled)
                 {
                     ListaCancionesMeGusta.IsSelectionEnabled = false;
                 }
-
-                // Ocultar la AppBar en el resto de las pestañas de la biblioteca
                 this.ApplicationBar = null;
             }
         }
 
         // --- MANEJADORES DE BOTONES ---
+        private void BtnCrearPlaylist_Click(object sender, EventArgs e)
+        {
+            // TODO: Lógica para mostrar diálogo o ir a página de creación de playlist
+            MessageBox.Show("Crear nueva playlist (En desarrollo)");
+        }
+
         private void BtnSeleccionar_Click(object sender, EventArgs e)
         {
             ListaCancionesMeGusta.IsSelectionEnabled = true;
@@ -101,11 +119,42 @@ namespace SpotifyClassic
             ListaCancionesMeGusta.IsSelectionEnabled = false;
         }
 
-        // --- EVENTOS DEL LONG LIST MULTI SELECTOR ---
+        // --- EVENTOS DE LISTAS ---
+        private void lstPlaylists_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (lstPlaylists.SelectedItem == null) return;
+            var playlist = lstPlaylists.SelectedItem as PlaylistModel;
+            if (playlist == null) return;
+
+            // NavigationService.Navigate(new Uri("/Pages/PlaylistPage.xaml", UriKind.Relative));
+            lstPlaylists.SelectedItem = null; // Limpiar selección para permitir volver a clickear
+        }
+
+        private void lstAlbumes_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (lstAlbumes.SelectedItem == null) return;
+            var album = lstAlbumes.SelectedItem as AlbumModel;
+            if (album == null) return;
+
+            NavigationService.Navigate(new Uri("/Pages/AlbumPage.xaml", UriKind.Relative));
+            lstAlbumes.SelectedItem = null;
+        }
+
+        private void lstArtistas_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (lstArtistas.SelectedItem == null) return;
+            var artista = lstArtistas.SelectedItem as ArtistModel;
+            if (artista == null) return;
+
+            // Navegar a la página del perfil del artista
+            NavigationService.Navigate(new Uri("/Pages/ArtistProfile.xaml", UriKind.Relative));
+
+            lstArtistas.SelectedItem = null; // Limpiar selección
+        }
+
         private void ListaCancionesMeGusta_IsSelectionEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             ActualizarBarraSegunSeleccion();
-
             if (!ListaCancionesMeGusta.IsSelectionEnabled)
             {
                 ListaCancionesMeGusta.SelectedItems.Clear();
@@ -178,6 +227,19 @@ namespace SpotifyClassic
         {
             try
             {
+                // Validación para Playlists
+                if (App.ViewModel.PlaylistsAgrupadas == null || App.ViewModel.PlaylistsAgrupadas.Count == 0)
+                {
+                    txtVacioPlaylists.Visibility = Visibility.Visible;
+                    lstPlaylists.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    txtVacioPlaylists.Visibility = Visibility.Collapsed;
+                    lstPlaylists.Visibility = Visibility.Visible;
+                }
+
+                // Validación para Álbumes
                 if (App.ViewModel.AlbumesAgrupados == null || App.ViewModel.AlbumesAgrupados.Count == 0)
                 {
                     txtVacioAlbumes.Visibility = Visibility.Visible;
@@ -188,21 +250,23 @@ namespace SpotifyClassic
                     txtVacioAlbumes.Visibility = Visibility.Collapsed;
                     lstAlbumes.Visibility = Visibility.Visible;
                 }
+
+                // Validación para Artistas
+                if (App.ViewModel.ArtistasAgrupados == null || App.ViewModel.ArtistasAgrupados.Count == 0)
+                {
+                    txtVacioArtistas.Visibility = Visibility.Visible;
+                    lstArtistas.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    txtVacioArtistas.Visibility = Visibility.Collapsed;
+                    lstArtistas.Visibility = Visibility.Visible;
+                }
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("Error al actualizar estado vacío: " + ex.Message);
             }
-        }
-
-        private void lstAlbumes_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (lstAlbumes.SelectedItem == null) return;
-
-            var album = lstAlbumes.SelectedItem as AlbumModel;
-            if (album == null) return;
-
-            NavigationService.Navigate(new Uri("/Pages/AlbumPage.xaml", UriKind.Relative));
         }
     }
 }
