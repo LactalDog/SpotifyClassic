@@ -126,7 +126,7 @@ namespace SpotifyClassic
             var playlist = lstPlaylists.SelectedItem as PlaylistModel;
             if (playlist == null) return;
 
-            // NavigationService.Navigate(new Uri("/Pages/PlaylistPage.xaml", UriKind.Relative));
+            NavigationService.Navigate(new Uri("/Pages/PlaylistPage.xaml", UriKind.Relative));
             lstPlaylists.SelectedItem = null; // Limpiar selección para permitir volver a clickear
         }
 
@@ -152,6 +152,7 @@ namespace SpotifyClassic
             lstArtistas.SelectedItem = null; // Limpiar selección
         }
 
+        
         private void ListaCancionesMeGusta_IsSelectionEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             ActualizarBarraSegunSeleccion();

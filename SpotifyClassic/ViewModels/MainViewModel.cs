@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Globalization;
 using SpotifyClassic.Data;
 using SpotifyClassic.Resources;
+using System.Windows;
 
 namespace SpotifyClassic.ViewModels
 {
@@ -21,12 +22,14 @@ namespace SpotifyClassic.ViewModels
             this.CancionesMeGusta = new ObservableCollection<TrackModel>();
             this.Playlists = new ObservableCollection<PlaylistModel>();
             this.Artistas = new ObservableCollection<ArtistModel>();
+            this.TopArtistas = new ObservableCollection<TopArtistModel>();
         }
 
         public ObservableCollection<ItemViewModel> Items { get; private set; }
         public ObservableCollection<AlbumModel> Albumes { get; private set; }
         public ObservableCollection<TrackModel> CancionesMeGusta { get; private set; }
         public ObservableCollection<PlaylistModel> Playlists { get; private set; }
+        public ObservableCollection<TopArtistModel> TopArtistas { get; private set; }
 
         private List<AlphaKeyGroup<AlbumModel>> _albumesAgrupados;
         public List<AlphaKeyGroup<AlbumModel>> AlbumesAgrupados
@@ -179,8 +182,95 @@ namespace SpotifyClassic.ViewModels
             Artistas.Add(new ArtistModel { Nombre = "Solar Fields", Portada = "/Assets/MusicPreview.png" });
             Artistas.Add(new ArtistModel { Nombre = "Taylor Swift", Portada = "/Assets/MusicPreview.png" });
 
-            ActualizarAgrupacionArtistas();
+            TopArtistas.Clear();
 
+            // EL PRIMERO ES GRANDE
+            TopArtistas.Add(new TopArtistModel
+            {
+                Puesto = "1",
+                Nombre = "Lady Gaga",
+                CancionTop = "Do I Wanna Know?",
+                Portada = "/Assets/MusicPreview.png",
+                VisibilidadGrande = Visibility.Visible,
+                VisibilidadNormal = Visibility.Collapsed
+            });
+
+            // EL RESTO ES NORMAL
+            TopArtistas.Add(new TopArtistModel
+            {
+                Puesto = "2",
+                Nombre = "AKIRA YAMAOKA",
+                CancionTop = "Reptilia",
+                Portada = "/Assets/MusicPreview.png",
+                VisibilidadGrande = Visibility.Collapsed,
+                VisibilidadNormal = Visibility.Visible
+            });
+            TopArtistas.Add(new TopArtistModel
+            {
+                Puesto = "3",
+                Nombre = "Solar Fields",
+                CancionTop = "Mirror's Edge Theme",
+                Portada = "/Assets/MusicPreview.png",
+                VisibilidadGrande = Visibility.Collapsed,
+                VisibilidadNormal = Visibility.Visible
+            });
+            TopArtistas.Add(new TopArtistModel
+            {
+                Puesto = "4",
+                Nombre = "Lin Manuel Miranda",
+                CancionTop = "Alexander Hamilton",
+                Portada = "/Assets/MusicPreview.png",
+                VisibilidadGrande = Visibility.Collapsed,
+                VisibilidadNormal = Visibility.Visible
+            });
+            TopArtistas.Add(new TopArtistModel
+            {
+                Puesto = "5",
+                Nombre = "Taylor Swift",
+                CancionTop = "Anti-Hero",
+                Portada = "/Assets/MusicPreview.png",
+                VisibilidadGrande = Visibility.Collapsed,
+                VisibilidadNormal = Visibility.Visible
+            });
+            TopArtistas.Add(new TopArtistModel
+            {
+                Puesto = "6",
+                Nombre = "Medium Build",
+                CancionTop = "King of Having Fun",
+                Portada = "/Assets/MusicPreview.png",
+                VisibilidadGrande = Visibility.Collapsed,
+                VisibilidadNormal = Visibility.Visible
+            });
+            TopArtistas.Add(new TopArtistModel
+            {
+                Puesto = "7",
+                Nombre = "Daft Punk",
+                CancionTop = "Get Lucky",
+                Portada = "/Assets/MusicPreview.png",
+                VisibilidadGrande = Visibility.Collapsed,
+                VisibilidadNormal = Visibility.Visible
+            });
+            TopArtistas.Add(new TopArtistModel
+            {
+                Puesto = "8",
+                Nombre = "Tame Impala",
+                CancionTop = "The Less I Know The Better",
+                Portada = "/Assets/MusicPreview.png",
+                VisibilidadGrande = Visibility.Collapsed,
+                VisibilidadNormal = Visibility.Visible
+            });
+
+            TopArtistas.Add(new TopArtistModel
+            {
+                Puesto = "9",
+                Nombre = "Juliana Gattas",
+                CancionTop = "Soy Así",
+                Portada = "/Assets/MusicPreview.png",
+                VisibilidadGrande = Visibility.Collapsed,
+                VisibilidadNormal = Visibility.Visible
+            });
+
+            ActualizarAgrupacionArtistas();
             ActualizarAgrupacionAlbumes();
             ActualizarAgrupacionCancionesMeGusta();
             ActualizarAgrupacionPlaylists();
@@ -231,6 +321,28 @@ namespace SpotifyClassic.ViewModels
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
+    }
+
+    public class TopArtistModel
+    {
+        public string Puesto { get; set; }
+        public string Nombre { get; set; }
+        public string CancionTop { get; set; }
+        public string Portada { get; set; }
+
+        public string TituloDisplay
+        {
+            get { return string.Format("#{0}\n{1}", Puesto, Nombre); }
+        }
+
+        public string MensajeDisplay
+        {
+            get { return string.Format("{0}", CancionTop); }
+        }
+
+        // NUEVAS PROPIEDADES PARA EL TAMAÑO
+        public Visibility VisibilidadGrande { get; set; }
+        public Visibility VisibilidadNormal { get; set; }
     }
 
     public class ArtistModel : INotifyPropertyChanged

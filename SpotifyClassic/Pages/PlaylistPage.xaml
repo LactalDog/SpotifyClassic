@@ -1,0 +1,117 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="SpotifyClassic.Pages.PlaylistPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait" shell:SystemTray.IsVisible="True"
+    shell:SystemTray.Opacity="0.0"
+    shell:SystemTray.BackgroundColor="Transparent">
+
+    <toolkit:TransitionService.NavigationInTransition>
+        <toolkit:NavigationInTransition>
+            <toolkit:NavigationInTransition.Backward>
+                <toolkit:TurnstileFeatherTransition Mode="BackwardIn"/>
+            </toolkit:NavigationInTransition.Backward>
+            <toolkit:NavigationInTransition.Forward>
+                <toolkit:TurnstileFeatherTransition Mode="ForwardIn"/>
+            </toolkit:NavigationInTransition.Forward>
+        </toolkit:NavigationInTransition>
+    </toolkit:TransitionService.NavigationInTransition>
+
+    <toolkit:TransitionService.NavigationOutTransition>
+        <toolkit:NavigationOutTransition>
+            <toolkit:NavigationOutTransition.Backward>
+                <toolkit:TurnstileFeatherTransition Mode="BackwardOut"/>
+            </toolkit:NavigationOutTransition.Backward>
+            <toolkit:NavigationOutTransition.Forward>
+                <toolkit:TurnstileFeatherTransition Mode="ForwardOut"/>
+            </toolkit:NavigationOutTransition.Forward>
+        </toolkit:NavigationOutTransition>
+    </toolkit:TransitionService.NavigationOutTransition>
+
+    <Grid x:Name="LayoutRoot" Background="{StaticResource PhoneBackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="24,17,24,0">
+            <TextBlock x:Name="Artista_titulo" Text="SPOTIFY" Style="{StaticResource PhoneTextNormalStyle}" Padding="0" Margin="0" FontFamily="{StaticResource PhoneFontFamilySemiBold}" toolkit:TurnstileFeatherEffect.FeatheringIndex="1"/>
+            <TextBlock x:Name="Tipo_titulo" Text="playlist" Style="{StaticResource PhoneTextNormalStyle}" Padding="0" Margin="0,0,0,12" FontFamily="{StaticResource PhoneFontFamilySemiLight}" FontSize="{StaticResource PanoramaItemHeaderFontSize}" toolkit:TurnstileFeatherEffect.FeatheringIndex="2"/>
+        </StackPanel>
+
+        <toolkit:LongListMultiSelector x:Name="ListaCanciones" Grid.Row="1" Margin="0" 
+                                       toolkit:TiltEffect.IsTiltEnabled="True">
+
+            <toolkit:LongListMultiSelector.ListHeader>
+                <StackPanel Orientation="Horizontal" Margin="24,0,0,24" toolkit:TurnstileFeatherEffect.FeatheringIndex="3">
+                    <Grid>
+                        <Image x:Name="Portada" Width="190" Source="/Assets/MusicPreview.png" Stretch="UniformToFill" HorizontalAlignment="Right" Height="190"/>
+                        <Border x:Name="drop_shadow" BorderThickness="1" Padding="0" HorizontalAlignment="Right" Height="70" VerticalAlignment="Top" Width="70">
+                            <Border.Background>
+                                <RadialGradientBrush>
+                                    <GradientStop Color="#59000000" Offset="0"/>
+                                    <GradientStop Offset="1"/>
+                                </RadialGradientBrush>
+                            </Border.Background>
+                        </Border>
+                        <Border x:Name="play_icon" BorderThickness="1" Padding="0" Height="50" Width="50" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,10,0">
+                            <Border.Background>
+                                <ImageBrush Stretch="UniformToFill" ImageSource="/Play.png"/>
+                            </Border.Background>
+                        </Border>
+                    </Grid>
+
+                    <StackPanel Margin="12,0,0,0">
+                        <TextBlock x:Name="Titulo" Text="Radar de novedades" Style="{StaticResource PhoneTextTitle1Style}" FontFamily="Portable User Interface" FontSize="{StaticResource PhoneFontSizeLarge}" LineStackingStrategy="BlockLineHeight" MaxHeight="102" LineHeight="34" Margin="0" TextTrimming="WordEllipsis" TextWrapping="Wrap">
+                            <TextBlock.Foreground>
+                                <SolidColorBrush Color="{StaticResource PhoneTextBoxSelectionForegroundColor}"/>
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                        <TextBlock x:Name="Creador" Text="de Spotify" Margin="0" Style="{StaticResource PhoneTextSubtleStyle}" FontFamily="Portable User Interface">
+                            <TextBlock.Foreground>
+                                <SolidColorBrush Color="{StaticResource SpotifyAccentColor}"/>
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                        <TextBlock x:Name="Detalles" Text="10 canciones • 1 h 10 min" Margin="0" Style="{StaticResource PhoneTextSubtleStyle}" FontFamily="{StaticResource PhoneFontFamilySemiLight}" LineStackingStrategy="BlockLineHeight" TextWrapping="Wrap" LineHeight="22" MaxHeight="44">
+                            <TextBlock.Foreground>
+                                <SolidColorBrush Color="{StaticResource PhoneTextMidContrastColor}"/>
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                    </StackPanel>
+                </StackPanel>
+            </toolkit:LongListMultiSelector.ListHeader>
+
+            <toolkit:LongListMultiSelector.ItemTemplate>
+                <DataTemplate>
+                    <DataTemplate>
+                        <Grid Margin="-12,8,0,8" toolkit:TurnstileFeatherEffect.FeatheringIndex="4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Image x:Name="Portada" Width="62" Height="62" Source="{Binding Portada}"/>
+                            <StackPanel Grid.Column="1" Margin="0,0,0,0">
+                                <TextBlock Text="{Binding Titulo}" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" FontFamily="{StaticResource PhoneFontFamilySemiLight}"/>
+                                <TextBlock Text="{Binding Artista}" Style="{StaticResource PhoneTextSubtleStyle}" FontSize="{StaticResource PhoneFontSizeNormal}" FontFamily="{StaticResource PhoneFontFamilySemiLight}">
+                                    <TextBlock.Foreground>
+                                        <SolidColorBrush Color="{StaticResource PhoneTextMidContrastColor}"/>
+                                    </TextBlock.Foreground>
+                                </TextBlock>
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </DataTemplate>
+            </toolkit:LongListMultiSelector.ItemTemplate>
+
+        </toolkit:LongListMultiSelector>
+
+    </Grid>
+</phone:PhoneApplicationPage>
