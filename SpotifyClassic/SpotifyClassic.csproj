@@ -167,7 +167,10 @@
     <Content Include="appbar.shuffle.png" />
     <Content Include="appbar.source.png" />
     <Content Include="Assets\AppBar\add.png" />
+    <Content Include="Assets\AppBar\appbar.refresh.png" />
+    <Content Include="Assets\AppBar\appbar.refresh1.png" />
     <Content Include="Assets\AppBar\appbar.shuffle.png" />
+    <Content Include="Assets\AppBar\appbar.source.png" />
     <Content Include="Assets\AppBar\back.png" />
     <Content Include="Assets\AppBar\basecircle.png" />
     <Content Include="Assets\AppBar\cancel.png" />
@@ -192,6 +195,7 @@
     <Content Include="Assets\AppBar\minus.png" />
     <Content Include="Assets\AppBar\new.png" />
     <Content Include="Assets\AppBar\next.png" />
+    <Content Include="Assets\AppBar\Play.png" />
     <Content Include="Assets\AppBar\questionmark.png" />
     <Content Include="Assets\AppBar\refresh.png" />
     <Content Include="Assets\AppBar\save.png" />
@@ -203,6 +207,7 @@
     <Content Include="Assets\AppBar\transport.play.png" />
     <Content Include="Assets\AppBar\transport.rew.png" />
     <Content Include="Assets\AppBar\upload.png" />
+    <Content Include="Assets\AppBar\wp_ss_20260923_0001.png" />
     <Content Include="Assets\BadgeLogo.png" />
     <Content Include="Assets\Covers\1989.jpg" />
     <Content Include="Assets\Covers\confident.png" />
