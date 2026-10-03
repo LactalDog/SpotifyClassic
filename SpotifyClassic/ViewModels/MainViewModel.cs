@@ -3,14 +3,21 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
+using System.Net;
+using System.Threading.Tasks;
+using System.Windows;
+using Newtonsoft.Json.Linq;
 using SpotifyClassic.Data;
 using SpotifyClassic.Resources;
-using System.Windows;
 
 namespace SpotifyClassic.ViewModels
 {
     public class MainViewModel : INotifyPropertyChanged
     {
+        private const string BackendBaseUrl = "http://192.168.100.20:3000";
+        private bool _isLibraryLoading = false;
+        public bool IsLibraryLoaded { get; private set; }
+
         public MainViewModel()
         {
             this.Items = new ObservableCollection<ItemViewModel>();
@@ -139,6 +146,127 @@ namespace SpotifyClassic.ViewModels
             }
         }
 
+        private Task<string> DownloadStringTaskAsync(string url)
+        {
+            var tcs = new TaskCompletionSource<string>();
+            var client = new WebClient();
+            client.DownloadStringCompleted += (s, e) =>
+            {
+                if (e.Error != null) tcs.TrySetException(e.Error);
+                else if (e.Cancelled) tcs.TrySetCanceled();
+                else tcs.TrySetResult(e.Result);
+            };
+            client.DownloadStringAsync(new Uri(url));
+            return tcs.Task;
+        }
+
+        public async Task CargarBibliotecaDesdeServidorAsync(bool forzarRecarga = false)
+        {
+            if (_isLibraryLoading) return;
+            if (IsLibraryLoaded && !forzarRecarga) return;
+
+            _isLibraryLoading = true;
+
+            try
+            {
+                string jsonString = await DownloadStringTaskAsync(BackendBaseUrl + "/api/library");
+                JObject root = JObject.Parse(jsonString);
+
+                JArray arrPlaylists = root["playlists"] as JArray;
+                JArray arrAlbumes = root["albumes"] as JArray;
+                JArray arrArtistas = root["artistas"] as JArray;
+                JArray arrCanciones = root["cancionesMeGusta"] as JArray;
+
+                Deployment.Current.Dispatcher.BeginInvoke(() =>
+                {
+                    // 1. Playlists (obtenidas con Shared Client ID)
+                    Playlists.Clear();
+                    if (arrPlaylists != null)
+                    {
+                        foreach (JObject obj in arrPlaylists)
+                        {
+                            string portada = (string)obj["portada"];
+                            Playlists.Add(new PlaylistModel
+                            {
+                                Titulo = (string)obj["titulo"] ?? "Sin título",
+                                Creador = (string)obj["creador"] ?? "Spotify",
+                                Portada = string.IsNullOrWhiteSpace(portada) ? "/Assets/MusicPreview.png" : portada,
+                                Uri = (string)obj["uri"] ?? ""
+                            });
+                        }
+                    }
+
+                    // 2. Álbumes (obtenidos con Personal Client ID)
+                    Albumes.Clear();
+                    if (arrAlbumes != null)
+                    {
+                        foreach (JObject obj in arrAlbumes)
+                        {
+                            string portada = (string)obj["portada"];
+                            Albumes.Add(new AlbumModel
+                            {
+                                Titulo = (string)obj["titulo"] ?? "Sin título",
+                                Artista = (string)obj["artista"] ?? "Desconocido",
+                                Año = (string)obj["anio"] ?? "",
+                                Portada = string.IsNullOrWhiteSpace(portada) ? "/Assets/MusicPreview.png" : portada,
+                                Uri = (string)obj["uri"] ?? ""
+                            });
+                        }
+                    }
+
+                    // 3. Artistas (obtenidos con Personal Client ID)
+                    Artistas.Clear();
+                    if (arrArtistas != null)
+                    {
+                        foreach (JObject obj in arrArtistas)
+                        {
+                            string portada = (string)obj["portada"];
+                            Artistas.Add(new ArtistModel
+                            {
+                                Nombre = (string)obj["nombre"] ?? "Desconocido",
+                                Portada = string.IsNullOrWhiteSpace(portada) ? "/Assets/MusicPreview.png" : portada,
+                                Uri = (string)obj["uri"] ?? ""
+                            });
+                        }
+                    }
+
+                    // 4. Canciones "Me gusta" (obtenidas con Personal Client ID)
+                    CancionesMeGusta.Clear();
+                    if (arrCanciones != null)
+                    {
+                        foreach (JObject obj in arrCanciones)
+                        {
+                            string portada = (string)obj["portada"];
+                            string artista = (string)obj["artista"] ?? "Desconocido";
+                            CancionesMeGusta.Add(new TrackModel
+                            {
+                                Titulo = (string)obj["titulo"] ?? "Sin título",
+                                Artista = artista,
+                                Bajada = (string)obj["bajada"] ?? artista,
+                                Portada = string.IsNullOrWhiteSpace(portada) ? "/Assets/MusicPreview.png" : portada,
+                                Uri = (string)obj["uri"] ?? ""
+                            });
+                        }
+                    }
+
+                    // Reagrupar alfabéticamente para los LongListSelectors de Biblioteca.xaml
+                    ActualizarAgrupacionPlaylists();
+                    ActualizarAgrupacionAlbumes();
+                    ActualizarAgrupacionArtistas();
+                    ActualizarAgrupacionCancionesMeGusta();
+
+                    IsLibraryLoaded = true;
+                });
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error cargando biblioteca real: " + ex.Message);
+            }
+            finally
+            {
+                _isLibraryLoading = false;
+            }
+        }
 
         public void LoadData()
         {
@@ -147,40 +275,6 @@ namespace SpotifyClassic.ViewModels
             Items.Add(new ItemViewModel() { LineOne = "álbumes" });
             Items.Add(new ItemViewModel() { LineOne = "me gusta" });
             Items.Add(new ItemViewModel() { LineOne = "artistas" });
-
-            Albumes.Clear();
-            // Colección con imágenes y metadatos adaptados al estilo de PicturesAlbum del Toolkit
-            Albumes.Add(new AlbumModel { Titulo = "Alan Wake 2 - The Lake House - 6 Deep Breaths by POE 1-52 screenshot", Artista = "Arctic Monkeys", Año = "2013", Portada = "/Assets/MusicPreview.png" });
-            Albumes.Add(new AlbumModel { Titulo = "American Horror Stories", Artista = "Lin Manuel Miranda", Año = "2013", Portada = "/Assets/MusicPreview.png" });
-            Albumes.Add(new AlbumModel { Titulo = "Currents", Artista = "taylor swift, lin manuel miranda, and Electronic arts music dicord label from 2015 Feat. Kesha from the black eyed peas", Año = "2015", Portada = "/Assets/MusicPreview.png" });
-            Albumes.Add(new AlbumModel { Titulo = "King of Having Fun", Artista = "Medium Build", Año = "2024", Portada = "/Assets/MusicPreview.png" });
-            Albumes.Add(new AlbumModel { Titulo = "The New Abnormal", Artista = "The Strokes", Año = "2020", Portada = "/Assets/MusicPreview.png" });
-            Albumes.Add(new AlbumModel { Titulo = "Favourite Worst Nightmare", Artista = "Arctic Monkeys", Año = "2007", Portada = "/Assets/MusicPreview.png" });
-            Albumes.Add(new AlbumModel { Titulo = "Is This It", Artista = "The Strokes", Año = "2001", Portada = "/Assets/MusicPreview.png" });
-
-            CancionesMeGusta.Add(new TrackModel { Titulo = "A new dawn: I like it", Artista = "Arctic Monkeys", Portada = "/Assets/MusicPreview.png" });
-            CancionesMeGusta.Add(new TrackModel { Titulo = "American in my heart", Artista = "Lin Manuel Miranda", Portada = "/Assets/MusicPreview.png" });
-            CancionesMeGusta.Add(new TrackModel { Titulo = "Currents", Artista = "taylor swift, lin manuel miranda, and Electronic arts music dicord label from 2015 Feat. Kesha from the black eyed peas", Portada = "/Assets/MusicPreview.png" });
-            CancionesMeGusta.Add(new TrackModel { Titulo = "King of Having Fun", Artista = "Medium Build", Portada = "/Assets/MusicPreview.png" });
-            CancionesMeGusta.Add(new TrackModel { Titulo = "The New Big Day", Artista = "The Strokes", Portada = "/Assets/MusicPreview.png" });
-            CancionesMeGusta.Add(new TrackModel { Titulo = "Fest in the night", Artista = "Arctic Monkeys", Portada = "/Assets/MusicPreview.png" });
-            CancionesMeGusta.Add(new TrackModel { Titulo = "Silents In The Wild", Artista = "The Strokes", Portada = "/Assets/MusicPreview.png" });
-
-            Playlists.Clear();
-            Playlists.Add(new PlaylistModel { Titulo = "Topsify Argentina", Creador = "Spotify", Portada = "/Assets/MusicPreview.png" });
-            Playlists.Add(new PlaylistModel { Titulo = "Rock Classics", Creador = "Juan Pérez", Portada = "/Assets/MusicPreview.png" });
-            Playlists.Add(new PlaylistModel { Titulo = "Focus para Programar", Creador = "Ivanna", Portada = "/Assets/MusicPreview.png" });
-            Playlists.Add(new PlaylistModel { Titulo = "Discover Weekly", Creador = "Spotify", Portada = "/Assets/MusicPreview.png" });
-            Playlists.Add(new PlaylistModel { Titulo = "Gym Motivation", Creador = "Ricardo", Portada = "/Assets/MusicPreview.png" });
-            Playlists.Add(new PlaylistModel { Titulo = "Viaje al Sur", Creador = "Godoy Tiago Joaquín", Portada = "/Assets/MusicPreview.png" });
-
-            Artistas.Clear();
-            Artistas.Add(new ArtistModel { Nombre = "Arctic Monkeys", Portada = "/Assets/MusicPreview.png" });
-            Artistas.Add(new ArtistModel { Nombre = "Lin Manuel Miranda", Portada = "/Assets/MusicPreview.png" });
-            Artistas.Add(new ArtistModel { Nombre = "Medium Build", Portada = "/Assets/MusicPreview.png" });
-            Artistas.Add(new ArtistModel { Nombre = "The Strokes", Portada = "/Assets/MusicPreview.png" });
-            Artistas.Add(new ArtistModel { Nombre = "Solar Fields", Portada = "/Assets/MusicPreview.png" });
-            Artistas.Add(new ArtistModel { Nombre = "Taylor Swift", Portada = "/Assets/MusicPreview.png" });
 
             TopArtistas.Clear();
 
@@ -259,7 +353,6 @@ namespace SpotifyClassic.ViewModels
                 VisibilidadGrande = Visibility.Collapsed,
                 VisibilidadNormal = Visibility.Visible
             });
-
             TopArtistas.Add(new TopArtistModel
             {
                 Puesto = "9",
@@ -270,12 +363,16 @@ namespace SpotifyClassic.ViewModels
                 VisibilidadNormal = Visibility.Visible
             });
 
+            // Inicializar agrupaciones vacías hasta que responda el servidor
             ActualizarAgrupacionArtistas();
             ActualizarAgrupacionAlbumes();
             ActualizarAgrupacionCancionesMeGusta();
             ActualizarAgrupacionPlaylists();
 
             IsDataLoaded = true;
+
+            // Disparar carga de datos reales de la biblioteca en segundo plano
+            var _ = CargarBibliotecaDesdeServidorAsync();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -291,7 +388,6 @@ namespace SpotifyClassic.ViewModels
         public ObservableCollection<PlayingModel> Reproduciendo { get; private set; }
     }
 
-    // 1. Añadir el nuevo modelo al final del archivo (fuera de la clase MainViewModel)
     public class PlaylistModel : INotifyPropertyChanged
     {
         private string _titulo;
@@ -314,6 +410,8 @@ namespace SpotifyClassic.ViewModels
             get { return _portada; }
             set { _portada = value; NotifyPropertyChanged("Portada"); }
         }
+
+        public string Uri { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string propertyName)
@@ -340,7 +438,6 @@ namespace SpotifyClassic.ViewModels
             get { return string.Format("Canción más escuchada: {0}", CancionTop); }
         }
 
-        // NUEVAS PROPIEDADES PARA EL TAMAÑO
         public Visibility VisibilidadGrande { get; set; }
         public Visibility VisibilidadNormal { get; set; }
     }
@@ -360,6 +457,8 @@ namespace SpotifyClassic.ViewModels
             get { return _portada; }
             set { _portada = value; NotifyPropertyChanged("Portada"); }
         }
+
+        public string Uri { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string propertyName)
@@ -437,13 +536,13 @@ namespace SpotifyClassic.ViewModels
             set { _año = value; NotifyPropertyChanged("Año"); }
         }
 
+        public string Uri { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
-
-       
     }
 }

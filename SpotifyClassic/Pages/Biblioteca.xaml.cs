@@ -184,9 +184,13 @@ namespace SpotifyClassic
             }
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
+
+            // Suscribirnos a cambios del ViewModel para refrescar la visibilidad cuando llegue el JSON
+            App.ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
+            App.ViewModel.PropertyChanged += ViewModel_PropertyChanged;
 
             if (e.NavigationMode != NavigationMode.Back)
             {
@@ -197,6 +201,12 @@ namespace SpotifyClassic
 
                 DataContext = App.ViewModel;
                 ActualizarEstadoVacio();
+
+                if (!App.ViewModel.IsLibraryLoaded)
+                {
+                    await App.ViewModel.CargarBibliotecaDesdeServidorAsync();
+                    ActualizarEstadoVacio();
+                }
             }
 
             if (NavigationContext.QueryString.ContainsKey("seccion"))
@@ -224,12 +234,23 @@ namespace SpotifyClassic
             }
         }
 
+        private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "PlaylistsAgrupadas" ||
+                e.PropertyName == "AlbumesAgrupados" ||
+                e.PropertyName == "ArtistasAgrupados" ||
+                e.PropertyName == "CancionesMeGustaAgrupadas")
+            {
+                Dispatcher.BeginInvoke(() => ActualizarEstadoVacio());
+            }
+        }
+
         private void ActualizarEstadoVacio()
         {
             try
             {
-                // Validación para Playlists
-                if (App.ViewModel.PlaylistsAgrupadas == null || App.ViewModel.PlaylistsAgrupadas.Count == 0)
+                // Validación para Playlists (verificamos la colección base porque AlphaKeyGroup siempre crea 28 cabeceras)
+                if (App.ViewModel.Playlists == null || App.ViewModel.Playlists.Count == 0)
                 {
                     txtVacioPlaylists.Visibility = Visibility.Visible;
                     lstPlaylists.Visibility = Visibility.Collapsed;
@@ -241,7 +262,7 @@ namespace SpotifyClassic
                 }
 
                 // Validación para Álbumes
-                if (App.ViewModel.AlbumesAgrupados == null || App.ViewModel.AlbumesAgrupados.Count == 0)
+                if (App.ViewModel.Albumes == null || App.ViewModel.Albumes.Count == 0)
                 {
                     txtVacioAlbumes.Visibility = Visibility.Visible;
                     lstAlbumes.Visibility = Visibility.Collapsed;
@@ -253,7 +274,7 @@ namespace SpotifyClassic
                 }
 
                 // Validación para Artistas
-                if (App.ViewModel.ArtistasAgrupados == null || App.ViewModel.ArtistasAgrupados.Count == 0)
+                if (App.ViewModel.Artistas == null || App.ViewModel.Artistas.Count == 0)
                 {
                     txtVacioArtistas.Visibility = Visibility.Visible;
                     lstArtistas.Visibility = Visibility.Collapsed;
