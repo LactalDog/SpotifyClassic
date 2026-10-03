@@ -1446,10 +1446,6 @@ namespace SpotifyClassic
                     {
                         _isLoadingTrack = false;
                         MostrarSliderReproduccion();
-
-                        // Notificamos a Spotify Connect que la pista acaba de empezar en el Lumia
-                        SincronizarConNube("play", track.Uri, 0);
-                        _ticksDesdeUltimoSync = 0;
                         return;
                     }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Net;
+using System.Threading;
 using System.Windows;
 using Microsoft.Phone.BackgroundAudio;
 
@@ -24,26 +25,46 @@ namespace SpotifyConcepto.AudioAgent
             e.Handled = true;
         }
 
-        private void NotificarServidor(string accion, string uri = null, int positionMs = 0)
+        /// <summary>
+        /// Envía el estado al servidor y espera (máximo 2500ms) antes de que NotifyComplete() congele el agente.
+        /// </summary>
+        private void NotificarServidorSincrono(string accion, string uri = null, int positionMs = 0)
         {
             try
             {
-                string url = string.Format("{0}/api/player/sync?action={1}&positionMs={2}",
-                    BackendBaseUrl, accion, Math.Max(0, positionMs));
+                string url = string.Format("{0}/api/player/sync?action={1}&positionMs={2}&t={3}",
+                    BackendBaseUrl, accion, Math.Max(0, positionMs), DateTime.UtcNow.Ticks);
 
                 if (!string.IsNullOrEmpty(uri))
                 {
                     url += "&uri=" + Uri.EscapeDataString(uri);
                 }
 
-                var client = new WebClient();
-                client.UploadStringAsync(new Uri(url), "POST", "");
+                using (ManualResetEvent doneEvent = new ManualResetEvent(false))
+                {
+                    var client = new WebClient();
+                    client.UploadStringCompleted += (s, e) =>
+                    {
+                        try { doneEvent.Set(); } catch { }
+                    };
+                    client.UploadStringAsync(new Uri(url), "POST", "");
+
+                    // Esperamos hasta 2.5 segundos en un hilo fuera del Dispatcher para que el paquete salga por red
+                    doneEvent.WaitOne(2500);
+                }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error en NotificarServidorSincrono: " + ex.Message);
+            }
         }
 
         protected override void OnPlayStateChanged(BackgroundAudioPlayer player, AudioTrack track, PlayState playState)
         {
+            string syncAction = null;
+            string syncUri = (track != null) ? track.Tag : null;
+            int syncPosMs = 0;
+
             try
             {
                 switch (playState)
@@ -54,11 +75,13 @@ namespace SpotifyConcepto.AudioAgent
                         {
                             player.Play();
                         }
+                        syncAction = "play";
+                        syncPosMs = 0;
                         break;
 
                     case PlayState.TrackEnded:
                         _trackEnded = true;
-                        NotificarServidor("pause");
+                        syncAction = "pause";
                         try
                         {
                             player.Position = TimeSpan.Zero;
@@ -87,7 +110,16 @@ namespace SpotifyConcepto.AudioAgent
             {
                 Debug.WriteLine("Error en OnPlayStateChanged: " + ex.Message);
             }
-            finally
+
+            if (syncAction != null)
+            {
+                ThreadPool.QueueUserWorkItem(_ =>
+                {
+                    NotificarServidorSincrono(syncAction, syncUri, syncPosMs);
+                    NotifyComplete();
+                });
+            }
+            else
             {
                 NotifyComplete();
             }
@@ -95,19 +127,20 @@ namespace SpotifyConcepto.AudioAgent
 
         protected override void OnUserAction(BackgroundAudioPlayer player, AudioTrack track, UserAction action, object param)
         {
+            string syncAction = null;
+            string syncUri = (track != null) ? track.Tag : null;
+            int syncPosMs = 0;
+
             try
             {
-                string trackUri = (track != null) ? track.Tag : null;
-
                 switch (action)
                 {
                     case UserAction.Play:
                         if (player.PlayerState == PlayState.Paused)
                         {
-                            int posMs = 0;
-                            try { posMs = (int)player.Position.TotalMilliseconds; } catch { }
+                            try { syncPosMs = (int)player.Position.TotalMilliseconds; } catch { }
                             player.Play();
-                            NotificarServidor("play", trackUri, posMs);
+                            syncAction = "play";
                         }
                         else if (player.PlayerState == PlayState.Stopped && track != null)
                         {
@@ -116,7 +149,8 @@ namespace SpotifyConcepto.AudioAgent
                                 try { player.Position = TimeSpan.Zero; } catch { }
                                 player.Play();
                                 _trackEnded = false;
-                                NotificarServidor("play", trackUri, 0);
+                                syncAction = "play";
+                                syncPosMs = 0;
                             }
                         }
                         break;
@@ -126,7 +160,7 @@ namespace SpotifyConcepto.AudioAgent
                         if (player.PlayerState != PlayState.Stopped)
                         {
                             player.Stop();
-                            NotificarServidor("pause");
+                            syncAction = "pause";
                         }
                         break;
 
@@ -134,7 +168,7 @@ namespace SpotifyConcepto.AudioAgent
                         if (player.PlayerState == PlayState.Playing)
                         {
                             player.Pause();
-                            NotificarServidor("pause");
+                            syncAction = "pause";
                         }
                         break;
 
@@ -159,7 +193,8 @@ namespace SpotifyConcepto.AudioAgent
                             if (newPos <= track.Duration)
                             {
                                 player.Position = newPos;
-                                NotificarServidor("seek", null, (int)newPos.TotalMilliseconds);
+                                syncAction = "seek";
+                                syncPosMs = (int)newPos.TotalMilliseconds;
                             }
                         }
                         break;
@@ -185,7 +220,16 @@ namespace SpotifyConcepto.AudioAgent
             {
                 Debug.WriteLine("Error en OnUserAction: " + ex.Message);
             }
-            finally
+
+            if (syncAction != null)
+            {
+                ThreadPool.QueueUserWorkItem(_ =>
+                {
+                    NotificarServidorSincrono(syncAction, syncUri, syncPosMs);
+                    NotifyComplete();
+                });
+            }
+            else
             {
                 NotifyComplete();
             }
