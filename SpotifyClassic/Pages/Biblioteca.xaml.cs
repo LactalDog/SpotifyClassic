@@ -126,7 +126,10 @@ namespace SpotifyClassic
             var playlist = lstPlaylists.SelectedItem as PlaylistModel;
             if (playlist == null) return;
 
-            NavigationService.Navigate(new Uri("/Pages/PlaylistPage.xaml", UriKind.Relative));
+            App.ViewModel.PlaylistSeleccionada = playlist;
+            string destino = "/Pages/PlaylistPage.xaml?uri=" + Uri.EscapeDataString(playlist.Uri ?? "");
+            NavigationService.Navigate(new Uri(destino, UriKind.Relative));
+
             lstPlaylists.SelectedItem = null; // Limpiar selección para permitir volver a clickear
         }
 
@@ -136,7 +139,10 @@ namespace SpotifyClassic
             var album = lstAlbumes.SelectedItem as AlbumModel;
             if (album == null) return;
 
-            NavigationService.Navigate(new Uri("/Pages/AlbumPage.xaml", UriKind.Relative));
+            App.ViewModel.AlbumSeleccionado = album;
+            string destino = "/Pages/AlbumPage.xaml?uri=" + Uri.EscapeDataString(album.Uri ?? "");
+            NavigationService.Navigate(new Uri(destino, UriKind.Relative));
+
             lstAlbumes.SelectedItem = null;
         }
 

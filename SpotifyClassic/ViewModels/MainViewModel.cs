@@ -208,6 +208,7 @@ namespace SpotifyClassic.ViewModels
                                 Titulo = (string)obj["titulo"] ?? "Sin título",
                                 Artista = (string)obj["artista"] ?? "Desconocido",
                                 Año = (string)obj["anio"] ?? "",
+                                Tipo = (string)obj["tipo"] ?? "álbum",
                                 Portada = string.IsNullOrWhiteSpace(portada) ? "/Assets/MusicPreview.png" : portada,
                                 Uri = (string)obj["uri"] ?? ""
                             });
@@ -386,6 +387,8 @@ namespace SpotifyClassic.ViewModels
         public ObservableCollection<NewsModel> Novedades { get; private set; }
         public ObservableCollection<SuggestionsModel> Sugerencias { get; private set; }
         public ObservableCollection<PlayingModel> Reproduciendo { get; private set; }
+        public PlaylistModel PlaylistSeleccionada { get; set; }
+        public AlbumModel AlbumSeleccionado { get; set; }
     }
 
     public class PlaylistModel : INotifyPropertyChanged
@@ -536,7 +539,15 @@ namespace SpotifyClassic.ViewModels
             set { _año = value; NotifyPropertyChanged("Año"); }
         }
 
+        private string _tipo;
+        public string Tipo
+        {
+            get { return _tipo; }
+            set { _tipo = value; NotifyPropertyChanged("Tipo"); }
+        }
+
         public string Uri { get; set; }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string propertyName)
