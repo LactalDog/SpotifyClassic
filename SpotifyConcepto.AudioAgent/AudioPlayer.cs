@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Net;
 using System.Windows;
 using Microsoft.Phone.BackgroundAudio;
 
@@ -8,6 +9,7 @@ namespace SpotifyConcepto.AudioAgent
     public class AudioPlayer : AudioPlayerAgent
     {
         private static bool _trackEnded = false;
+        private const string BackendBaseUrl = "http://192.168.100.20:3000";
 
         static AudioPlayer()
         {
@@ -19,8 +21,25 @@ namespace SpotifyConcepto.AudioAgent
 
         private static void UnhandledException(object sender, ApplicationUnhandledExceptionEventArgs e)
         {
-            // Evita que excepciones nativas de Media Foundation o de red cierren HeadlessHost
             e.Handled = true;
+        }
+
+        private void NotificarServidor(string accion, string uri = null, int positionMs = 0)
+        {
+            try
+            {
+                string url = string.Format("{0}/api/player/sync?action={1}&positionMs={2}",
+                    BackendBaseUrl, accion, Math.Max(0, positionMs));
+
+                if (!string.IsNullOrEmpty(uri))
+                {
+                    url += "&uri=" + Uri.EscapeDataString(uri);
+                }
+
+                var client = new WebClient();
+                client.UploadStringAsync(new Uri(url), "POST", "");
+            }
+            catch { }
         }
 
         protected override void OnPlayStateChanged(BackgroundAudioPlayer player, AudioTrack track, PlayState playState)
@@ -39,6 +58,7 @@ namespace SpotifyConcepto.AudioAgent
 
                     case PlayState.TrackEnded:
                         _trackEnded = true;
+                        NotificarServidor("pause");
                         try
                         {
                             player.Position = TimeSpan.Zero;
@@ -52,7 +72,6 @@ namespace SpotifyConcepto.AudioAgent
                         break;
 
                     case PlayState.BufferingStopped:
-                        // Si tras un salto temporal el búfer se completó y no arrancó automáticamente
                         if (!_trackEnded && player.PlayerState == PlayState.Paused)
                         {
                             player.Play();
@@ -61,15 +80,6 @@ namespace SpotifyConcepto.AudioAgent
 
                     case PlayState.Playing:
                         _trackEnded = false;
-                        break;
-
-                    case PlayState.Shutdown:
-                    case PlayState.Unknown:
-                    case PlayState.Stopped:
-                    case PlayState.Paused:
-                    case PlayState.BufferingStarted:
-                    case PlayState.Rewinding:
-                    case PlayState.FastForwarding:
                         break;
                 }
             }
@@ -87,25 +97,26 @@ namespace SpotifyConcepto.AudioAgent
         {
             try
             {
+                string trackUri = (track != null) ? track.Tag : null;
+
                 switch (action)
                 {
                     case UserAction.Play:
                         if (player.PlayerState == PlayState.Paused)
                         {
+                            int posMs = 0;
+                            try { posMs = (int)player.Position.TotalMilliseconds; } catch { }
                             player.Play();
+                            NotificarServidor("play", trackUri, posMs);
                         }
                         else if (player.PlayerState == PlayState.Stopped && track != null)
                         {
                             if (_trackEnded || player.Position == TimeSpan.Zero)
                             {
-                                try
-                                {
-                                    player.Position = TimeSpan.Zero;
-                                }
-                                catch { }
-
+                                try { player.Position = TimeSpan.Zero; } catch { }
                                 player.Play();
                                 _trackEnded = false;
+                                NotificarServidor("play", trackUri, 0);
                             }
                         }
                         break;
@@ -115,6 +126,7 @@ namespace SpotifyConcepto.AudioAgent
                         if (player.PlayerState != PlayState.Stopped)
                         {
                             player.Stop();
+                            NotificarServidor("pause");
                         }
                         break;
 
@@ -122,6 +134,7 @@ namespace SpotifyConcepto.AudioAgent
                         if (player.PlayerState == PlayState.Playing)
                         {
                             player.Pause();
+                            NotificarServidor("pause");
                         }
                         break;
 
@@ -145,8 +158,8 @@ namespace SpotifyConcepto.AudioAgent
                             TimeSpan newPos = (TimeSpan)param;
                             if (newPos <= track.Duration)
                             {
-                                // Asignamos la nueva posición dentro del entorno protegido del agente
                                 player.Position = newPos;
+                                NotificarServidor("seek", null, (int)newPos.TotalMilliseconds);
                             }
                         }
                         break;
@@ -191,7 +204,6 @@ namespace SpotifyConcepto.AudioAgent
         protected override void OnError(BackgroundAudioPlayer player, AudioTrack track, Exception error, bool isFatal)
         {
             Debug.WriteLine("--- ERROR EN AUDIO AGENT: " + error.Message + " ---");
-
             try
             {
                 if (isFatal && player.PlayerState != PlayState.Stopped)

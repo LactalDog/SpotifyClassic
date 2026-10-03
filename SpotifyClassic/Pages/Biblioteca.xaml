@@ -50,8 +50,7 @@
                 <Setter.Value>
                     <DataTemplate>
                         <Border Background="{Binding Converter={StaticResource BackgroundConverter}}"
-                                Margin="6" toolkit:TiltEffect.IsTiltEnabled="True"
-                                toolkit:TurnstileFeatherEffect.FeatheringIndex="1">
+                                Margin="6" toolkit:TiltEffect.IsTiltEnabled="True">
                             <TextBlock Text="{Binding Key}" 
                                        FontFamily="{StaticResource PhoneFontFamilySemiBold}"
                                        FontSize="48" Margin="12,0,0,0"
@@ -92,12 +91,11 @@
                                 ItemsSource="{Binding PlaylistsAgrupadas}"
                                 JumpListStyle="{StaticResource JumpListStyle}"
                                 SelectionChanged="lstPlaylists_SelectionChanged"
-                                toolkit:TiltEffect.IsTiltEnabled="True" ListFooterTemplate="{StaticResource DataTemplate2}">
+                                toolkit:TiltEffect.IsTiltEnabled="True" ListFooterTemplate="{StaticResource DataTemplate2}" toolkit:TurnstileFeatherEffect.FeatheringIndex="1">
 
                         <phone:LongListSelector.GroupHeaderTemplate>
                             <DataTemplate>
-                                <Border Background="Transparent" Margin="12,8,0,8"
-                            toolkit:TurnstileFeatherEffect.FeatheringIndex="1">
+                                <Border Background="Transparent" Margin="12,8,0,8">
                                     <Border Background="{StaticResource SpotifyAccentBrush}"
                                 Padding="8,0,0,0" Width="62" Height="62"                
                                 HorizontalAlignment="Left">
@@ -112,8 +110,7 @@
 
                         <phone:LongListSelector.ItemTemplate>
                             <DataTemplate>
-                                <Grid Margin="12,8,0,8" Background="Transparent" 
-                          toolkit:TurnstileFeatherEffect.FeatheringIndex="1">
+                                <Grid Margin="12,8,0,8" Background="Transparent">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
@@ -143,7 +140,7 @@
                                VerticalAlignment="Center" 
                                Style="{StaticResource PhoneTextSubtleStyle}" 
                                Visibility="Collapsed"
-                               toolkit:TurnstileFeatherEffect.FeatheringIndex="1" toolkit:SlideInEffect.LineIndex="1" FontFamily="{StaticResource PhoneFontFamilySemiLight}"/>
+                               toolkit:TurnstileFeatherEffect.FeatheringIndex="2" toolkit:SlideInEffect.LineIndex="1" FontFamily="{StaticResource PhoneFontFamilySemiLight}"/>
 
                     <!-- AGREGADO: SelectionChanged -->
                     <phone:LongListSelector x:Name="lstAlbumes"
@@ -152,12 +149,11 @@
                                             ItemsSource="{Binding AlbumesAgrupados}"
                                             JumpListStyle="{StaticResource JumpListStyle}"
                                             SelectionChanged="lstAlbumes_SelectionChanged"
-                                            toolkit:TiltEffect.IsTiltEnabled="True">
+                                            toolkit:TiltEffect.IsTiltEnabled="True" toolkit:TurnstileFeatherEffect.FeatheringIndex="2">
 
                         <phone:LongListSelector.GroupHeaderTemplate>
                             <DataTemplate>
-                                <Border Background="Transparent" Margin="12,8,0,8"
-                                        toolkit:TurnstileFeatherEffect.FeatheringIndex="1">
+                                <Border Background="Transparent" Margin="12,8,0,8">
                                     <Border Background="{StaticResource SpotifyAccentBrush}"
                                             Padding="8,0,0,0" Width="62" Height="62"                
                                             HorizontalAlignment="Left">
@@ -173,8 +169,7 @@
                         <phone:LongListSelector.ItemTemplate>
                             <DataTemplate>
                                 <!-- QUITADO: El evento Tap directo del Grid -->
-                                <Grid Margin="12,8,0,8" Background="Transparent" 
-                                      toolkit:TurnstileFeatherEffect.FeatheringIndex="2">
+                                <Grid Margin="12,8,0,8" Background="Transparent">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
@@ -204,13 +199,12 @@
                                    JumpListStyle="{StaticResource JumpListStyle}"
                                    SelectionChanged="ListaCancionesMeGusta_SelectionChanged"
                                    IsSelectionEnabledChanged="ListaCancionesMeGusta_IsSelectionEnabledChanged"
-                                   toolkit:TiltEffect.IsTiltEnabled="True" ListFooterTemplate="{StaticResource DataTemplate1}">
+                                   toolkit:TiltEffect.IsTiltEnabled="True" ListFooterTemplate="{StaticResource DataTemplate1}" toolkit:TurnstileFeatherEffect.FeatheringIndex="3">
 
                     <!-- AGREGADO: Plantilla idéntica a la de álbumes para las letras de grupo -->
                     <toolkit:LongListMultiSelector.GroupHeaderTemplate>
                         <DataTemplate>
-                            <Border Background="Transparent" Margin="12,8,0,8"
-                        toolkit:TurnstileFeatherEffect.FeatheringIndex="1">
+                            <Border Background="Transparent" Margin="12,8,0,8">
                                 <Border Background="{StaticResource SpotifyAccentBrush}"
                             Padding="8,0,0,0" Width="62" Height="62"                
                             HorizontalAlignment="Left">
@@ -225,7 +219,7 @@
 
                     <toolkit:LongListMultiSelector.ItemTemplate>
                         <DataTemplate>
-                            <Grid Margin="-12,8,0,8" toolkit:TurnstileFeatherEffect.FeatheringIndex="2">
+                            <Grid Margin="-12,8,0,8">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
@@ -254,7 +248,7 @@
                    VerticalAlignment="Center" 
                    Style="{StaticResource PhoneTextSubtleStyle}" 
                    Visibility="Collapsed"
-                   toolkit:TurnstileFeatherEffect.FeatheringIndex="1" toolkit:SlideInEffect.LineIndex="1" FontFamily="{StaticResource PhoneFontFamilySemiLight}"/>
+                   toolkit:TurnstileFeatherEffect.FeatheringIndex="4" toolkit:SlideInEffect.LineIndex="1" FontFamily="{StaticResource PhoneFontFamilySemiLight}"/>
 
                     <phone:LongListSelector x:Name="lstArtistas"
                                 IsGroupingEnabled="true" 
@@ -262,12 +256,11 @@
                                 ItemsSource="{Binding ArtistasAgrupados}"
                                 JumpListStyle="{StaticResource JumpListStyle}"
                                 SelectionChanged="lstArtistas_SelectionChanged"
-                                toolkit:TiltEffect.IsTiltEnabled="True">
+                                toolkit:TiltEffect.IsTiltEnabled="True" toolkit:TurnstileFeatherEffect.FeatheringIndex="4">
 
                         <phone:LongListSelector.GroupHeaderTemplate>
                             <DataTemplate>
-                                <Border Background="Transparent" Margin="12,8,0,8"
-                            toolkit:TurnstileFeatherEffect.FeatheringIndex="1">
+                                <Border Background="Transparent" Margin="12,8,0,8">
                                     <Border Background="{StaticResource SpotifyAccentBrush}"
                                 Padding="8,0,0,0" Width="62" Height="62"                
                                 HorizontalAlignment="Left">
@@ -282,8 +275,7 @@
 
                         <phone:LongListSelector.ItemTemplate>
                             <DataTemplate>
-                                <Grid Margin="12,8,0,8" Background="Transparent" 
-                          toolkit:TurnstileFeatherEffect.FeatheringIndex="1">
+                                <Grid Margin="12,8,0,8" Background="Transparent">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>

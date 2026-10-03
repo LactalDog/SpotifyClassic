@@ -189,8 +189,8 @@ namespace SpotifyClassic.ViewModels
             {
                 Puesto = "1",
                 Nombre = "Lady Gaga",
-                CancionTop = "Do I Wanna Know?",
-                Portada = "/Assets/MusicPreview.png",
+                CancionTop = "LoveDrug",
+                Portada = "/Assets/Covers/thefame.png",
                 VisibilidadGrande = Visibility.Visible,
                 VisibilidadNormal = Visibility.Collapsed
             });
@@ -199,63 +199,63 @@ namespace SpotifyClassic.ViewModels
             TopArtistas.Add(new TopArtistModel
             {
                 Puesto = "2",
-                Nombre = "AKIRA YAMAOKA",
-                CancionTop = "Reptilia",
-                Portada = "/Assets/MusicPreview.png",
+                Nombre = "PinkPantheress",
+                CancionTop = "Stateside + Zara Larsson",
+                Portada = "/Assets/Covers/pinkp.jpg",
                 VisibilidadGrande = Visibility.Collapsed,
                 VisibilidadNormal = Visibility.Visible
             });
             TopArtistas.Add(new TopArtistModel
             {
                 Puesto = "3",
-                Nombre = "Solar Fields",
-                CancionTop = "Mirror's Edge Theme",
-                Portada = "/Assets/MusicPreview.png",
+                Nombre = "Girls' Generation",
+                CancionTop = "FLOWER POWER",
+                Portada = "/Assets/NewsCovers/juno.png",
                 VisibilidadGrande = Visibility.Collapsed,
                 VisibilidadNormal = Visibility.Visible
             });
             TopArtistas.Add(new TopArtistModel
             {
                 Puesto = "4",
-                Nombre = "Lin Manuel Miranda",
-                CancionTop = "Alexander Hamilton",
-                Portada = "/Assets/MusicPreview.png",
+                Nombre = "TWICE",
+                CancionTop = "LIKEY",
+                Portada = "/Assets/Covers/TWICE.jpg",
                 VisibilidadGrande = Visibility.Collapsed,
                 VisibilidadNormal = Visibility.Visible
             });
             TopArtistas.Add(new TopArtistModel
             {
                 Puesto = "5",
-                Nombre = "Taylor Swift",
-                CancionTop = "Anti-Hero",
-                Portada = "/Assets/MusicPreview.png",
+                Nombre = "C418",
+                CancionTop = "Moog City",
+                Portada = "/Assets/Covers/mcost.png",
                 VisibilidadGrande = Visibility.Collapsed,
                 VisibilidadNormal = Visibility.Visible
             });
             TopArtistas.Add(new TopArtistModel
             {
                 Puesto = "6",
-                Nombre = "Medium Build",
-                CancionTop = "King of Having Fun",
-                Portada = "/Assets/MusicPreview.png",
+                Nombre = "Blake Neely",
+                CancionTop = "",
+                Portada = "/Assets/Covers/confident.png",
                 VisibilidadGrande = Visibility.Collapsed,
                 VisibilidadNormal = Visibility.Visible
             });
             TopArtistas.Add(new TopArtistModel
             {
                 Puesto = "7",
-                Nombre = "Daft Punk",
-                CancionTop = "Get Lucky",
-                Portada = "/Assets/MusicPreview.png",
+                Nombre = "Akira Yamaoka",
+                CancionTop = "White Noise (Actual Noise)",
+                Portada = "/Assets/Covers/sh2.png",
                 VisibilidadGrande = Visibility.Collapsed,
                 VisibilidadNormal = Visibility.Visible
             });
             TopArtistas.Add(new TopArtistModel
             {
                 Puesto = "8",
-                Nombre = "Tame Impala",
-                CancionTop = "The Less I Know The Better",
-                Portada = "/Assets/MusicPreview.png",
+                Nombre = "Brian Reitzell",
+                CancionTop = "",
+                Portada = "/Assets/NewsCovers/1.png",
                 VisibilidadGrande = Visibility.Collapsed,
                 VisibilidadNormal = Visibility.Visible
             });
@@ -263,9 +263,9 @@ namespace SpotifyClassic.ViewModels
             TopArtistas.Add(new TopArtistModel
             {
                 Puesto = "9",
-                Nombre = "Juliana Gattas",
-                CancionTop = "Soy Así",
-                Portada = "/Assets/MusicPreview.png",
+                Nombre = "Shakira",
+                CancionTop = "",
+                Portada = "/Assets/NewsCovers/montana.png",
                 VisibilidadGrande = Visibility.Collapsed,
                 VisibilidadNormal = Visibility.Visible
             });
@@ -337,7 +337,7 @@ namespace SpotifyClassic.ViewModels
 
         public string MensajeDisplay
         {
-            get { return string.Format("{0}", CancionTop); }
+            get { return string.Format("Canción más escuchada: {0}", CancionTop); }
         }
 
         // NUEVAS PROPIEDADES PARA EL TAMAÑO

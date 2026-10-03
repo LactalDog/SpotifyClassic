@@ -28,6 +28,10 @@ namespace SpotifyClassic
         private const string BackendBaseUrl = "http://192.168.100.20:3000";
         private const string PlaceholderAsset = "/Assets/MusicPreview.png";
 
+        //Constantes para reporte con Spotify Connect
+        private const string KeyLastTrackUri = "LastTrackUri";
+        private int _ticksDesdeUltimoSync = 0;
+
         // Claves de configuración en almacenamiento flash (IsolatedStorageSettings)
         private const string KeyLastCoverUrl = "LastCoverUrl";
         private const string KeyLastTitle = "LastTrackTitle";
@@ -512,6 +516,27 @@ namespace SpotifyClassic
             return tcs.Task;
         }
 
+        private void SincronizarConNube(string accion, string trackUri = null, int positionMs = 0)
+        {
+            try
+            {
+                string url = string.Format("{0}/api/player/sync?action={1}&positionMs={2}",
+                    BackendBaseUrl, accion, Math.Max(0, positionMs));
+
+                if (!string.IsNullOrEmpty(trackUri))
+                {
+                    url += "&uri=" + Uri.EscapeDataString(trackUri);
+                }
+
+                var client = new WebClient();
+                client.UploadStringAsync(new Uri(url), "POST", "");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error en SincronizarConNube: " + ex.Message);
+            }
+        }
+
         private Task<Stream> OpenReadTaskAsync(string url)
         {
             var tcs = new TaskCompletionSource<Stream>();
@@ -910,6 +935,22 @@ namespace SpotifyClassic
                 {
                     ActualizarProgresoReproduccion();
                 }
+
+                // Al final de Timer_Tick:
+                if (!_isSeeking && SafeGetPlayerState() == PlayState.Playing)
+                {
+                    _ticksDesdeUltimoSync++;
+                    if (_ticksDesdeUltimoSync >= 40) // Cada 20 segundos
+                    {
+                        _ticksDesdeUltimoSync = 0;
+                        try
+                        {
+                            int posMs = (int)BackgroundAudioPlayer.Instance.Position.TotalMilliseconds;
+                            SincronizarConNube("seek", null, posMs);
+                        }
+                        catch { }
+                    }
+                }
             }
             catch { }
         }
@@ -1296,6 +1337,7 @@ namespace SpotifyClassic
             // 3. Persistencia de metadatos en almacenamiento flash
             IsolatedStorageSettings.ApplicationSettings[KeyLastCoverUrl] = track.Portada ?? "";
             IsolatedStorageSettings.ApplicationSettings[KeyLastTitle] = _targetTrackTitulo;
+            IsolatedStorageSettings.ApplicationSettings[KeyLastTrackUri] = track.Uri ?? "";
             IsolatedStorageSettings.ApplicationSettings.Save();
 
             ActualizarVisibilidadReproductor(true);
@@ -1362,11 +1404,13 @@ namespace SpotifyClassic
                 Uri audioUri = new Uri(m4aUrl, UriKind.Absolute);
 
                 AudioTrack audioTrack = new AudioTrack(
-                    audioUri,
-                    _targetTrackTitulo,
-                    _targetTrackArtista,
-                    "Spotify Classic",
-                    null
+                audioUri,
+                _targetTrackTitulo,
+                _targetTrackArtista,
+                "Spotify Classic",
+                null,
+                track.Uri, // <-- Guardamos el URI de Spotify en el Tag del AudioTrack
+                EnabledPlayerControls.All
                 );
 
                 if (requestId != _playRequestId) return;
@@ -1398,10 +1442,14 @@ namespace SpotifyClassic
                     var currentTrack = SafeGetTrack();
 
                     if (currentTrack != null && currentTrack.Title == _targetTrackTitulo &&
-                        (state == PlayState.Playing || state == PlayState.Paused))
+                    (state == PlayState.Playing || state == PlayState.Paused))
                     {
                         _isLoadingTrack = false;
                         MostrarSliderReproduccion();
+
+                        // Notificamos a Spotify Connect que la pista acaba de empezar en el Lumia
+                        SincronizarConNube("play", track.Uri, 0);
+                        _ticksDesdeUltimoSync = 0;
                         return;
                     }
 
@@ -1500,6 +1548,7 @@ namespace SpotifyClassic
                             try
                             {
                                 BackgroundAudioPlayer.Instance.Position = nuevaPosicion;
+                                SincronizarConNube("seek", null, (int)nuevaPosicion.TotalMilliseconds);
                             }
                             catch (Exception ex)
                             {
@@ -1662,6 +1711,11 @@ namespace SpotifyClassic
         private void iralista(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new Uri("/Pages/Queue.xaml", UriKind.Relative));
+        }
+
+        private void ir_playlists(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/Pages/Biblioteca.xaml?seccion=playlists", UriKind.Relative));
         }
     }
 }
